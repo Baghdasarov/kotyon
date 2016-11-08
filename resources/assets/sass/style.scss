@@ -1,0 +1,100 @@
+.page_header{
+  font-size: 35px;
+  font-weight: 800;
+
+}
+.section_title{
+  margin-top:0px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.stats_square{
+
+  width: 115px;
+  height: 115px;
+  float:left;
+  margin-left: 20px;
+  background: #3D97D5;
+}
+.color_top{
+  display: block;
+  background: #CC3F8E;
+  height: 25px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+}
+.addkeyword{
+  margin-top: 25px;
+}
+table.dataTable.select tbody tr,
+table.dataTable thead th:first-child {
+  cursor: pointer;
+}
+.num_group{
+  color: #fff;
+  font-size: 25px;
+  text-align: center;
+  display: block;
+  margin-top: 12px;
+}
+.up_or_down{
+  color: #fff;
+  display: block;
+  text-align: right;
+  font-size: 25px;
+  margin-right: 14px;
+}
+.up{
+  color:lightgreen;
+}
+.please_wait{
+  display:block;
+  text-align: center;
+  color:white;
+  font-size: 36px;
+  font-weight: 600;
+  margin:20% auto;
+}
+.down{
+  color:#CC3F8E;
+}
+.add_key_modal{
+  color: #2FC5D0;
+  font-size: 20px;
+  font-weight: 600;
+}
+.video_name{
+  font-size: 16px;
+  font-weight: 600;
+  color:#17C4BB;
+  cursor:pointer;
+}
+.profile_inputs{
+  width:100% !important;
+  border-radius:5px !important;
+  border:1px solid #c2cad8 !important;
+}
+.channel_name{
+  height: 34px;
+  display: block;
+  font-size: 15px;
+  line-height: 32px;
+  font-weight: 600;
+}
+.defaule_channel{
+  position: absolute;
+  display: inline-block;
+  right: 180px;
+}
+.customdanger{
+  height:100%;
+  line-height: 34px;
+  padding-left: 220px;
+}
+
+.count {
+  float: right;
+  color: grey;
+}
