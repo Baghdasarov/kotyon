@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'LoginController@index');
+Route::get('/', 'DashboardController@index');
 Route::get('dashboard', 'DashboardController@index');
 Route::get('rankings/{csv?}', 'DashboardController@rankings');
 Route::get('rankingsJson', 'DashboardController@rankingsJson');

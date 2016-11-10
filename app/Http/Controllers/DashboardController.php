@@ -31,13 +31,17 @@ class DashboardController extends Controller
     );
     public function __construct(Request $laravel_request){
         if(!$laravel_request->session()->has('user_id')){
-            dd('Permission denied');            
+            return redirect('login');
         }
     }
 
     public $youtube;
     public function index(Request $laravel_request){
-        return view('dashboard');
+        if($laravel_request->session()->has('user_id')){
+            return view('dashboard');
+        }else{
+            return redirect('login');
+        }
     }
 
     public function rankingsJson(Request $request)
@@ -103,6 +107,7 @@ class DashboardController extends Controller
 
         $search = Search::orderBy('created_at', 'asc')
             ->where($where)
+            ->where('rating','!=',0)
             ->whereIn('keyword', $keys)
             ->get()
             ->groupBy(function($search) {
@@ -173,6 +178,9 @@ class DashboardController extends Controller
                 foreach ($item as $it) {
                     $a += $it->rating;
                 }
+                if($dat==0){
+                    dd($dat);
+                }
                 $array[$date][] = [strtotime($dat) * 1000, $a / $d];
 				if(!isset($array[$date][1])){
                        $array[$date][1] = [strtotime($dat) * 1000, $a / $d];
@@ -209,16 +217,21 @@ class DashboardController extends Controller
                         'title'=>$search->video_name,
                         'keyword'=>$keyword->keyword,
                         'keyword_id'=>$keyword->id,
-                        'rank'=>$search->rating,
+                        'rank'=>($search->rating==0)?'N/A':$search->rating,
                         'high'=>$search->high,
                         'country'=>$keyword->country,
-                        'group'=>$keyword->group,
+                        'url'=>$search->video_id,
                         'preferred'=>$search->preferred,
                         'others'=>$searches->toArray(),
                     ];
                 }
             }
         }
+
+        $alldata = array_values(array_sort($alldata, function ($value) {
+            return $value['rank'];
+        }));
+
         $prevData = [];
         $dates = [
             'day'=>[
@@ -327,7 +340,7 @@ class DashboardController extends Controller
                 }
 
                 $csvFile[$stepForCsv]['Country'] = $alldat['country'];
-                $csvFile[$stepForCsv]['Group'] = $alldat['group'];
+                $csvFile[$stepForCsv]['URL'] = (!empty($alldat['url']))?"https://www.youtube.com/watch?v=".$alldat['url']:'';
 
 
                 $stepForCsv++;
@@ -336,7 +349,7 @@ class DashboardController extends Controller
             header('Content-Type: text/csv; charset=utf-8');
             header('Content-Disposition: attachment; filename="rankings.csv";');
             $fp = fopen('php://output', 'w');
-            fputcsv($fp, array('Video','Keyword','Rank','Day','Week','Month','Country','Group'));
+            fputcsv($fp, array('Video','Keyword','Rank','Day','Week','Month','Country','URL'));
             foreach ($csvFile as $csvFil){
                 fputcsv($fp, $csvFil);
             }
@@ -345,6 +358,13 @@ class DashboardController extends Controller
             return;
 
         }
+
+        $groupsQuery = Keywords::select('group')->distinct()->get()->toArray();
+        foreach ($groupsQuery as $groupQuery){
+            if($groupQuery['group'] != ""){
+                $group[]=$groupQuery['group'];
+            };
+        }
         return view('rankings', [
             'alldata' => $alldata,
             'prevData' => $prevData,
@@ -352,6 +372,7 @@ class DashboardController extends Controller
             'countKeyword' => $countKeyword,
             'country' => $sortedCountry,
             'countryKeyword' => $sortedCountryAddKeyword,
+            'group' => $group,
         ]);
 
 
@@ -384,17 +405,19 @@ class DashboardController extends Controller
     public function setPreferred(Request $request)
     {
         $term = $request->input('keyword');
+        $keyword_id = $request->input('keyword_id');
         $videos = $this->getVideos($term);
         $removePerfered = $request->input('removePerfered');
         if($removePerfered == 1){
-            $keyword = Keywords::where('keyword', $term)
+            $keyword = Keywords::where('id', $keyword_id)
                 ->where('user_id', session('user_id'))
                 ->where('channel_id', session('default_channel')->channelid);
 
-            $keywordForSearch = $keyword->get()->first()->id;
             $keyword->update((['preferred' => '']));
 
-            Search::where('keyword', $keywordForSearch)->update((['preferred'=>'0','video_id'=>'']));
+            Search::where('keyword', $keyword_id)
+                ->where('preferred',1)
+                ->delete();
             return redirect('rankings');
         }
         $pref_url = $request->input('video_url');

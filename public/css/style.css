@@ -180,6 +180,9 @@ table.dataTable thead th:first-child {
     overflow: hidden;
     padding: 0px;
 }
+#showGraphModal .modal-dialog{
+    width: 70%;
+}
 .selectboxSpace{
     height: 115px;
 }

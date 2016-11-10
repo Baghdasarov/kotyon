@@ -105,11 +105,7 @@
                                                             <div class="row">
                                                                 <div class="col-lg-6">
                                                                     <label for="group">Add To Keyword Group (Optional)</label>
-                                                                    <select class="form-control" id="group" name="group">
-                                                                        <option>First</option>
-                                                                        <option>Second</option>
-                                                                        <option>Third</option>                                                  
-                                                                    </select>
+                                                                    {{Form::select(null,$group,null,array('class'=>'form-control','id'=>'group'))}}
                                                                 </div>
                                                             </div>
                                                         </div>                                                   
@@ -187,11 +183,7 @@
 
                                                         <div class="form-group col-md-6">
                                                             <label for="groups"><b>Choose Group</b></label>
-                                                            <select class="form-control" id="groupsPopUp">
-                                                                <option value="First">First Group</option>
-                                                                <option value="Second">Second Group</option>
-                                                                <option value="Third">Third Group</option>
-                                                            </select>
+                                                            {{Form::select(null,$group,null,array('class'=>'form-control','id'=>'groupsPopUp'))}}
                                                         </div>
                                                         <div class="createGroup col-md-6 hide">
                                                             <label for="groups"><b>Create Group</b></label>
@@ -268,12 +260,13 @@
                                                     <div class="col-lg-3 col-sm-12 col-xs-12 selectboxSpace">
                                                         <div class="form-group">
                                                             <label for="groups">Keyword Group</label>
-                                                            <select class="form-control" id="groups">
-                                                                <option value="">All</option>
-                                                                <option value="First">First Group</option>
-                                                                <option value="Second">Second Group</option>
-                                                                <option value="Third">Third Group</option>
-                                                            </select>
+                                                            {{Form::select(null,$group,null,array('class'=>'form-control','id'=>'groups'))}}
+                                                            {{--<select class="form-control" id="groups">--}}
+                                                                {{--<option value="">All</option>--}}
+                                                                {{--<option value="First">First Group</option>--}}
+                                                                {{--<option value="Second">Second Group</option>--}}
+                                                                {{--<option value="Third">Third Group</option>--}}
+                                                            {{--</select>--}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-3 col-sm-12 col-xs-12 selectboxSpace">
@@ -300,12 +293,12 @@
                                                             </th>
                                                             <th> Video </th>
                                                             <th> Keyword </th>
-                                                            <th> Rank </th>
+                                                            <th class="rankSort"> Rank </th>
                                                             <th> Day </th>
                                                             <th> Week </th>
                                                             <th> Month </th>
                                                             <th> Country </th>
-                                                            <th> Group </th>
+                                                            <th> URL </th>
                                                             <th> Actions </th>
                                                         </tr>
                                                     </thead>
@@ -387,7 +380,7 @@
                                                                 @endif
                                                             </td>
                                                             <td data-country="{{$data['country']}}"> {{$data['country']}} </td>
-                                                            <td>{{$data['group']}}</td>
+                                                            <td><a href="https://www.youtube.com/watch?v={{$data['url']}}" target="_blank">{{$data['url']}}</a></td>
                                                             <td>
                                                                 <div class="btn-group">
                                                                     <button class="btn btn-xs green dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> Actions
@@ -438,6 +431,7 @@
                                             <label for="usr">Preferred Video</label>
                                             <input type="text" class="form-control" id="video_url" name="video_url" placeholder="Enter Video URL">
                                             <input type="hidden" name="keyword" id="preferred_keyword" value="">
+                                            <input type="hidden" name="keyword_id" id="preferred_keyword_id" value="">
                                             <input type="hidden" name="country" id="preferred_country" value="">
                                             <input type="hidden" name="group" id="preferred_group" value="">
                                             <input type="hidden" name="removePerfered" id="remove_perfered" value="0">

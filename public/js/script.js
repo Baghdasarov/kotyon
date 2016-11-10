@@ -62,16 +62,19 @@ $(document).ready(function(){
 
     $('.video_name').click(function () {
         var keyword = $(this).next().text();
+        var keyword_id = $(this).parent().data('keyid');
         var country = $(this).next().next().next().next().next().next().text();
         var group = $(this).next().next().next().next().next().next().next().text();
         $('#preferred_keyword').val(keyword);
+        $('#preferred_keyword_id').val(keyword_id);
         $('#preferred_country').val(country);
         $('#preferred_group').val(group);
-        
+
         if($(this).find(':first-child').hasClass('preferred')){
             $('.removePerfered').removeClass('hide');
             $("#perfered_video input[name='removePerfered']").val('1');
         }else{
+            $("#perfered_video input[name='removePerfered']").val('0');
             $('.removePerfered').addClass('hide');
         }
         
@@ -85,31 +88,49 @@ $(document).ready(function(){
         var row = $(this).parent().parent().parent().parent().parent();
         var keyword = $(this).data('keyword');
         var wait = $('#myPleaseWait');
-        wait.modal('show');
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-Token': $('input[name="_token"]').val()
-            }
+
+        $('#confirm').modal('show');
+        $('#confirm .modal-body').text("Are you sure you want to delete"+ ' "'+keyword+'" '+" keywords");
+        $(".confirmClose").click(function () {
+            $('#actions option:first-child').attr("selected", "selected");
         });
-        $.ajax({
-            method: "POST",
-            url: "deleteKeyword",
-            data: {keyword:keyword},
-            success: function(res){
-                if(res == 'success'){
-                    row.hide();
+
+        $(".confirmDelete").click(function () {
+            wait.modal('show');
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-Token': $('input[name="_token"]').val()
                 }
-                wait.modal('hide');
-            }
+            });
+            $.ajax({
+                method: "POST",
+                url: "deleteKeyword",
+                data: {keyword: keyword},
+                success: function (res) {
+                    if (res == 'success') {
+                        row.hide();
+                    }
+                    wait.modal('hide');
+                    $('#confirm').modal('hide');
+                }
+            });
         });
     });
 
+    $(".group-checkable").change(function () {
+        if($(".group-checkable").is(':checked')){
+            $(".checkboxes").prop('checked',true);
+        }else{
+            $(".checkboxes").prop('checked',false);
+        }
+    })
     $('.action-link-graph').click(function () {
         var keyword = $(this).data('keyword');
         $.ajax({
             url: "rankingsJson",
             data: {keyword:keyword},
             success: function(res){
+                $(document).scrollTop(50);
                 seriesOptions[0] = {
                     name: keyword,
                     data: res
@@ -153,7 +174,6 @@ $(document).ready(function(){
                     compare: 'value'
                 }
             },
-
             tooltip: {
                 pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change})<br/>',
                 valueDecimals: 2
@@ -185,6 +205,8 @@ $(document).ready(function(){
         "aLengthMenu": [[25, 50, 100], [25, 50, 100]],
         "iDisplayLength": 25
     });
+
+    $(".rankSort").click();
 
     $('#select_country').on('change',(function () {
         table.column(7).search(this.value).draw();
@@ -376,6 +398,9 @@ $(document).ready(function(){
                         chart: {
                             renderTo: 'showGraphModalBody',
                             type: 'line',
+                            // Explicitly tell the width and height of a chart
+                            width: 900,
+                            height: 500
                         },
                         navigator: {
                             enabled: false
@@ -433,12 +458,12 @@ $(document).ready(function(){
 
                         plotOptions: {
                             series: {
-                                compare: 'precent'
+                                compare: 'value'
                             }
                         },
 
                         tooltip: {
-                            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+                            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change})<br/>',
                             valueDecimals: 2
                         },
 
@@ -471,6 +496,11 @@ $(document).ready(function(){
                             chart: {
                                 renderTo: 'showGraphModalBody',
                                 type: 'line',
+                                width: 900,
+                                height: 500
+                            },
+                            legend: {
+                                enabled: true
                             },
                             navigator: {
                                 enabled: false
@@ -529,15 +559,14 @@ $(document).ready(function(){
 
                             plotOptions: {
                                 series: {
-                                    compare: 'precent'
+                                    compare: 'value'
                                 }
                             },
 
                             tooltip: {
-                                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+                                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change})<br/>',
                                 valueDecimals: 2
                             },
-
                             series: seriesOptionsPopUp
                         });
                     }
