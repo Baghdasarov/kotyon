@@ -105,7 +105,7 @@
                                                             <div class="row">
                                                                 <div class="col-lg-6">
                                                                     <label for="group">Add To Keyword Group (Optional)</label>
-                                                                    {{Form::select(null,$group,null,array('class'=>'form-control','id'=>'group'))}}
+                                                                    {{Form::select('group',$group,null,array('class'=>'form-control','id'=>'group'))}}
                                                                 </div>
                                                             </div>
                                                         </div>                                                   
@@ -298,6 +298,7 @@
                                                             <th> Week </th>
                                                             <th> Month </th>
                                                             <th> Country </th>
+                                                            <th class="hide"> Group </th>
                                                             <th> URL </th>
                                                             <th> Actions </th>
                                                         </tr>
@@ -380,6 +381,7 @@
                                                                 @endif
                                                             </td>
                                                             <td data-country="{{$data['country']}}"> {{$data['country']}} </td>
+                                                            <td class="hide">{{$data['group']}}</td>
                                                             <td><a href="https://www.youtube.com/watch?v={{$data['url']}}" target="_blank">{{$data['url']}}</a></td>
                                                             <td>
                                                                 <div class="btn-group">

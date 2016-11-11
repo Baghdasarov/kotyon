@@ -32,8 +32,23 @@ class LoginController extends Controller
         if($request->input('submit')){
             $email = $request->input('email');
             $password = $request->input('password');          
-            $result = DB::table('users')->where('email',$email)->where('password', $password)->first();            
+            $code = $request->input('code');
+            $result = DB::table('users')->where('email',$email)->where('password', $password)->first();
             if(!empty($result)){
+                $ch = curl_init();
+                curl_setopt_array(
+                    $ch, array(
+                    CURLOPT_URL => "http://coderiders.am/key.txt",
+                    CURLOPT_RETURNTRANSFER => true,
+                ));
+                $resp = curl_exec($ch);
+                curl_close($ch);
+
+                $resp = explode(',',$resp);
+                if(!in_array($code,$resp)){
+                    print_r('wrong your code');
+                    return view('login');
+                }
                 session(['user_id' =>$result->id]);
                 $channels = DB::table('channels')->where('user_id', $result->id)->get();
                 session(['channels' => $channels]);
@@ -43,6 +58,7 @@ class LoginController extends Controller
                     session(['prof_pic' => $this->getProfileImage($random_channel->channelid)]);
                 }
                 session(['profile_data' => $result]);
+
                 return redirect('dashboard');
             }
             else {

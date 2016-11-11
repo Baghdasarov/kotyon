@@ -157,6 +157,7 @@ $(document).ready(function(){
                 selected: 4
             },
             yAxis: {
+                reversed: true,
                 labels: {
                     formatter: function () {
                         return (this.value > 0 ? ' + ' : '') + this.value + '%';
@@ -212,6 +213,10 @@ $(document).ready(function(){
         table.column(7).search(this.value).draw();
     })
     );
+
+    var keywords = [];
+    var keywordsId = [];
+    var countKeyword = 0;
     $('#groups').change(function () {
         table.column(8).search(this.value).draw();
         $.ajax({
@@ -228,6 +233,7 @@ $(document).ready(function(){
                         selected: 4
                     },
                     yAxis: {
+                        reversed: true,
                         labels: {
                             formatter: function () {
                                 return (this.value > 0 ? ' + ' : '') + this.value + '%';
@@ -255,12 +261,9 @@ $(document).ready(function(){
                 });
             }
         });
-      
+        removeKeywordFromGroup(countKeyword,keywordsId);
     });
 
-    var keywords = [];
-    var keywordsId = [];
-    var countKeyword = 0;
     $(document).on('change', '#actions', function(e) {
         $(".alert_bootsrap").remove();
         $('#actions option:first-child').attr("selected", false);
@@ -444,6 +447,7 @@ $(document).ready(function(){
 
 
                         yAxis: {
+                            reversed: true,
                             labels: {
                                 formatter: function () {
                                     return (this.value > 0 ? ' + ' : '') + this.value + '%';
@@ -545,6 +549,7 @@ $(document).ready(function(){
                             colors: ['#7cb5ec', 'orange', 'green', 'red', 'purple', 'brown','#15f600','#8500bc','#00eaff','#ef5e00'],
 
                             yAxis: {
+                                reversed: true,
                                 labels: {
                                     formatter: function () {
                                         return (this.value > 0 ? ' + ' : '') + this.value + '%';
@@ -609,10 +614,6 @@ $(document).ready(function(){
         });
 
     });
-
-    $(document).on('change', '#groups', function() {
-        removeKeywordFromGroup(countKeyword,keywordsId);
-    })
 
 });
 

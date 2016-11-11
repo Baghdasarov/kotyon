@@ -220,6 +220,7 @@ class DashboardController extends Controller
                         'rank'=>($search->rating==0)?'N/A':$search->rating,
                         'high'=>$search->high,
                         'country'=>$keyword->country,
+                        'group'=>$keyword->group,
                         'url'=>$search->video_id,
                         'preferred'=>$search->preferred,
                         'others'=>$searches->toArray(),
@@ -362,7 +363,11 @@ class DashboardController extends Controller
         $groupsQuery = Keywords::select('group')->distinct()->get()->toArray();
         foreach ($groupsQuery as $groupQuery){
             if($groupQuery['group'] != ""){
-                $group[]=$groupQuery['group'];
+                $ob = json_decode($groupQuery['group']);
+                if($ob === null) {
+                    $group[$groupQuery['group']]=$groupQuery['group'];
+                }
+
             };
         }
         return view('rankings', [
@@ -391,11 +396,25 @@ class DashboardController extends Controller
             }
         }else{
             foreach ($postKeywords as $postKeyword){
-                Keywords::where('id', $postKeyword)
+                $res = Keywords::where('id', $postKeyword)
                     ->where('user_id', session('user_id'))
-                    ->where('channel_id', session('default_channel')->channelid)
-                    ->update((['group' => $postGroup]))
-                ;
+                    ->where('channel_id', session('default_channel')->channelid);
+                $groupArr = (json_decode($res->first()->group)===null)?$res->first()->group:json_decode($res->first()->group);
+                $groupArray = array();
+                if(!empty($groupArr) && !is_string($groupArr)){
+                    foreach ($groupArr as $k=>$groupAr){
+                        $groupAr = str_replace('"', "", $groupAr);
+                        $groupArray[str_replace('"', "", $k)] = $groupAr;
+                    }
+                }else{
+                    $groupArray[] = $groupArr;
+                }
+                if(!in_array($postGroup,$groupArray)){
+                    $groupArray[] = $postGroup;
+                }
+
+                $res->update((['group' => json_encode($groupArray)]));
+                unset($groupArray);
             }
         }
         echo 'success';
