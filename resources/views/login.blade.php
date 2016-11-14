@@ -10,6 +10,11 @@
         <link rel="shortcut icon" href="favicon.ico" />
     </head>
     <body>
+        @if(isset($error))
+            <div class="alert alert-danger">
+                {{$error}}
+            </div>
+        @endif
         {!! Form::open(['url' => 'login']) !!}
         <div class="login form-group">
             <div class="form-group">                

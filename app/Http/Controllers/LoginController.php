@@ -47,8 +47,8 @@ class LoginController extends Controller
                 return redirect('dashboard');
             }
             else {
-                print_r('wrong username of password');
-                return view('login');
+                $error = 'wrong username or password';
+                return view('login',compact('error'));
             }
         }
         
