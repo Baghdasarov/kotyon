@@ -24,6 +24,9 @@
             <div class="form-group">                
                 <input class="form-control" type="password" name="password" class="password" placeholder="Enter Your Password">
             </div>
+            <div class="form-group">
+                <input class="form-control" type="text" name="code" class="password" placeholder="Enter Your code">
+            </div>
             <input type="submit" name="submit" value="Registration" class="btn btn-primary">
             <a class="btn btn-default" href="login">Back to login page</a>
         </div>

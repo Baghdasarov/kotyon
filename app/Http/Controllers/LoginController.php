@@ -31,24 +31,9 @@ class LoginController extends Controller
     public function login(Request $request){
         if($request->input('submit')){
             $email = $request->input('email');
-            $password = $request->input('password');          
-            $code = $request->input('code');
+            $password = $request->input('password');
             $result = DB::table('users')->where('email',$email)->where('password', $password)->first();
             if(!empty($result)){
-                $ch = curl_init();
-                curl_setopt_array(
-                    $ch, array(
-                    CURLOPT_URL => "http://coderiders.am/key.txt",
-                    CURLOPT_RETURNTRANSFER => true,
-                ));
-                $resp = curl_exec($ch);
-                curl_close($ch);
-
-                $resp = explode(',',$resp);
-                if(!in_array($code,$resp)){
-                    print_r('wrong your code');
-                    return view('login');
-                }
                 session(['user_id' =>$result->id]);
                 $channels = DB::table('channels')->where('user_id', $result->id)->get();
                 session(['channels' => $channels]);
@@ -94,10 +79,27 @@ class LoginController extends Controller
             $firstname = $request->input('firstname');
             $lastname = $request->input('lastname');
             $email = $request->input('email');
+            $code = $request->input('code');
             $email_check = DB::table('users')->where('email', $email)->first();
             if($email_check){                
                 dd('Email already exists');                
-            }            
+            }
+
+            $ch = curl_init();
+            curl_setopt_array(
+                $ch, array(
+                CURLOPT_URL => "http://coderiders.am/key.txt",
+                CURLOPT_RETURNTRANSFER => true,
+            ));
+            $resp = curl_exec($ch);
+            curl_close($ch);
+
+            $resp = explode(',',$resp);
+            if(!in_array($code,$resp)){
+                print_r('wrong your code');
+                return view('register');
+            }
+
             $password = $request->input('password');
             $data = array(
                 'firstname' => $firstname,
