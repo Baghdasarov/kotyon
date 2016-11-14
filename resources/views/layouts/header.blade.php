@@ -1,5 +1,5 @@
 <meta charset="utf-8" />
-<title>Metronic | The Ultimate Multi-purpose Bootstrap Admin Dashboard Theme | Theme #2 | Admin Dashboard 2</title>
+<title>Rankify | NovelConcept</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta content="width=device-width, initial-scale=1" name="viewport" />
 <meta content="#1 selling multi-purpose bootstrap admin theme sold in themeforest marketplace packed with angularjs, material design, rtl support with over thausands of templates and ui elements and plugins to power any type of web applications including saas and admin dashboards. Preview page of Theme #2 for statistics, charts, recent events and reports"
