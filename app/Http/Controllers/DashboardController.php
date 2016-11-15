@@ -217,7 +217,7 @@ class DashboardController extends Controller
                         'title'=>$search->video_name,
                         'keyword'=>$keyword->keyword,
                         'keyword_id'=>$keyword->id,
-                        'rank'=>($search->rating==0)?'N/A':$search->rating,
+                        'rank'=>$search->rating,//($search->rating==0)?'N/A':$search->rating,
                         'high'=>$search->high,
                         'country'=>$keyword->country,
                         'group'=>$keyword->group,
