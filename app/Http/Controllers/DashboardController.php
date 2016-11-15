@@ -385,7 +385,12 @@ class DashboardController extends Controller
                 }
             }
         }
+
         $group = array_unique($group);
+        foreach ($group as $ke=>$grou){
+            $groups[$grou]=$grou;
+        }
+        unset($group);
 
         return view('rankings', [
             'alldata' => $alldata,
@@ -394,7 +399,7 @@ class DashboardController extends Controller
             'countKeyword' => $countKeyword,
             'country' => $sortedCountry,
             'countryKeyword' => $sortedCountryAddKeyword,
-            'group' => $group,
+            'group' => $groups,
         ]);
 
 
@@ -451,9 +456,14 @@ class DashboardController extends Controller
 
             $keyword->update((['preferred' => '']));
 
-            Search::where('keyword', $keyword_id)
-                ->where('preferred',1)
-                ->delete();
+            $getSearch = Search::where('keyword', $keyword_id)
+                ->where('preferred',1);
+            if(!empty($getSearch->first()->video_id)){
+                $video_name = $videos[$getSearch->first()->video_id]['snippet']['title'];
+            }else{
+                $video_name = "(nothing found in top results)";
+            }
+            $getSearch->update((['preferred' => '','video_name'=>$video_name]));
             return redirect('rankings');
         }
         $pref_url = $request->input('video_url');
@@ -523,17 +533,22 @@ class DashboardController extends Controller
                 'created_at'=>Carbon::now(),
             ]);
         }
-        if($i > 0){
-            Search::where('keyword',$keyword)
-                ->where('created_at', '>=', Carbon::today())
-                ->delete();
-        }
+//        if($i > 0){
+//            Search::where('keyword',$keyword)
+//                ->where('created_at', '>=', Carbon::today())
+//                ->delete();
+//        }
         Keywords::where('keyword', $term)
             ->where('user_id', session('user_id'))
             ->where('channel_id', session('default_channel')->channelid)
             ->update((['preferred' => $pref_id]))
         ;
-        Search::insert($insert_array);
+
+        Search::where('keyword', $keyword_id)
+            ->where('created_at', '>=', Carbon::today())
+            ->where('high','1')
+            ->update($insert_array[0]);
+
         return redirect('rankings');
     }
 
@@ -1002,6 +1017,7 @@ class DashboardController extends Controller
         $user_id = $request->session()->get('user_id');
         $channel_id = $request->session()->get('default_channel')->channelid;
         $keyword = $request->input('keyword');
+        $keyword_id = $request->input('keyword_id');
         if(is_array($keyword) && !empty($keyword)){
 
             foreach ($keyword as $keyw){
@@ -1017,12 +1033,11 @@ class DashboardController extends Controller
             echo 'success';
             return;
         }else{
-            $keyword_table = Keywords::where('keyword', $keyword)
+            $keyword_table = Keywords::where('id', $keyword_id)
                 ->where('user_id', $user_id)
                 ->where('channel_id', $channel_id);
-            $kid = $keyword_table->get()->first()->id;
             $kdel = $keyword_table->delete();
-            $search = Search::where('keyword', $kid)->delete();
+            $search = Search::where('keyword', $keyword_id)->delete();
             if($search && $kdel){
                 echo 'success';
                 return;

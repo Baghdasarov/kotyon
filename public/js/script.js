@@ -87,6 +87,7 @@ $(document).ready(function(){
     $('.action-link-delete').click(function () {
         var row = $(this).parent().parent().parent().parent().parent();
         var keyword = $(this).data('keyword');
+        var keyword_id = $(this).data('keid');
         var wait = $('#myPleaseWait');
 
         $('#confirm').modal('show');
@@ -105,7 +106,7 @@ $(document).ready(function(){
             $.ajax({
                 method: "POST",
                 url: "deleteKeyword",
-                data: {keyword: keyword},
+                data: {keyword: keyword,keyword_id:keyword_id},
                 success: function (res) {
                     if (res == 'success') {
                         row.hide();
@@ -160,7 +161,7 @@ $(document).ready(function(){
                 reversed: true,
                 labels: {
                     formatter: function () {
-                        return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                        return (this.value > 0 ? ' + ' : '') + this.value; //+ '%';
                     }
                 },
                 plotLines: [{
@@ -236,7 +237,7 @@ $(document).ready(function(){
                         reversed: true,
                         labels: {
                             formatter: function () {
-                                return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                                return (this.value > 0 ? ' + ' : '') + this.value;
                             }
                         },
                         plotLines: [{
@@ -450,7 +451,7 @@ $(document).ready(function(){
                             reversed: true,
                             labels: {
                                 formatter: function () {
-                                    return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                                    return (this.value > 0 ? ' + ' : '') + this.value;
                                 }
                             },
                             plotLines: [{
@@ -552,7 +553,7 @@ $(document).ready(function(){
                                 reversed: true,
                                 labels: {
                                     formatter: function () {
-                                        return (this.value > 0 ? ' + ' : '') + this.value + '%';
+                                        return (this.value > 0 ? ' + ' : '') + this.value ;
                                     }
                                 },
                                 plotLines: [{

@@ -395,7 +395,7 @@
                                                                             </a>
                                                                         </li>
                                                                         <li>
-                                                                            <a data-keyword="{{$data['keyword']}}" class="action-link-delete" href="javascript:void(0)">
+                                                                            <a data-keyword="{{$data['keyword']}}"  data-keid="{{$data['keyword_id']}}" class="action-link-delete" href="javascript:void(0)">
                                                                                 <i class="icon-tag"></i>Delete Keyword
                                                                             </a>
                                                                         </li>
