@@ -88,13 +88,13 @@ class LoginController extends Controller
             $ch = curl_init();
             curl_setopt_array(
                 $ch, array(
-                CURLOPT_URL => "http://coderiders.am/key.txt",
+                CURLOPT_URL => "http://novelconcept.org/code.txt",
                 CURLOPT_RETURNTRANSFER => true,
             ));
             $resp = curl_exec($ch);
             curl_close($ch);
 
-            $resp = explode(',',$resp);
+            $resp = explode(':',$resp);
             if(!in_array($code,$resp)){
                 print_r('wrong your code');
                 return view('register');

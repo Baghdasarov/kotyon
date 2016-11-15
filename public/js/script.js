@@ -207,7 +207,7 @@ $(document).ready(function(){
         "iDisplayLength": 25
     });
 
-    $(".rankSort").click();
+    // $(".rankSort").click();
 
     $('#select_country').on('change',(function () {
         table.column(7).search(this.value).draw();

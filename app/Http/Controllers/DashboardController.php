@@ -233,6 +233,12 @@ class DashboardController extends Controller
             return $value['rank'];
         }));
 
+        foreach ($alldata as $key=>$alldat){
+            if($alldat['rank']=="N/A"){
+                $alldata[]=$alldat;
+                unset($alldata[$key]);
+            }
+        }
         $prevData = [];
         $dates = [
             'day'=>[
@@ -359,17 +365,28 @@ class DashboardController extends Controller
             return;
 
         }
-
-        $groupsQuery = Keywords::select('group')->distinct()->get()->toArray();
+        $groupsQuery = Keywords::select('group')->where('channel_id', $channel_session->channelid)->distinct()->get()->toArray();
+        $group=['First','Second','Third'];
         foreach ($groupsQuery as $groupQuery){
             if($groupQuery['group'] != ""){
                 $ob = json_decode($groupQuery['group']);
                 if($ob === null) {
                     $group[$groupQuery['group']]=$groupQuery['group'];
+                }else{
+                    $newGroupArr[] = $ob;
                 }
-
             };
+        };
+
+        if(isset($newGroupArr) && !empty($newGroupArr)){
+            foreach ($newGroupArr as $newGroupAr){
+                foreach ($newGroupAr as $newGr) {
+                    $group[] = $newGr;
+                }
+            }
         }
+        $group = array_unique($group);
+
         return view('rankings', [
             'alldata' => $alldata,
             'prevData' => $prevData,
