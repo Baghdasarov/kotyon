@@ -217,7 +217,7 @@ class DashboardController extends Controller
                         'title'=>$search->video_name,
                         'keyword'=>$keyword->keyword,
                         'keyword_id'=>$keyword->id,
-                        'rank'=>$search->rating,//($search->rating==0)?'N/A':$search->rating,
+                        'rank'=>/*$search->rating,*/($search->rating==0)?'N/A':$search->rating,
                         'high'=>$search->high,
                         'country'=>$keyword->country,
                         'group'=>$keyword->group,
@@ -237,8 +237,12 @@ class DashboardController extends Controller
             if($alldat['rank']=="N/A"){
                 $alldata[]=$alldat;
                 unset($alldata[$key]);
+            }else{
+                $maxNum[]=$alldat['rank'];
             }
         }
+        $maxRank = max($maxNum)+1;
+
         $prevData = [];
         $dates = [
             'day'=>[
@@ -392,6 +396,9 @@ class DashboardController extends Controller
         }
         unset($group);
 
+        $groupSlectPage = $groups;
+        array_unshift($groupSlectPage,'slecet group');
+
         return view('rankings', [
             'alldata' => $alldata,
             'prevData' => $prevData,
@@ -400,6 +407,8 @@ class DashboardController extends Controller
             'country' => $sortedCountry,
             'countryKeyword' => $sortedCountryAddKeyword,
             'group' => $groups,
+            'groupSelect' => $groupSlectPage,
+            'maxRank' => $maxRank,
         ]);
 
 

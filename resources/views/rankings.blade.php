@@ -260,7 +260,7 @@
                                                     <div class="col-lg-3 col-sm-12 col-xs-12 selectboxSpace">
                                                         <div class="form-group">
                                                             <label for="groups">Keyword Group</label>
-                                                            {{Form::select(null,$group,null,array('class'=>'form-control','id'=>'groups'))}}
+                                                            {{Form::select(null,$groupSelect,null,array('class'=>'form-control','id'=>'groups'))}}
                                                             {{--<select class="form-control" id="groups">--}}
                                                                 {{--<option value="">All</option>--}}
                                                                 {{--<option value="First">First Group</option>--}}
@@ -343,7 +343,13 @@
                                                                 </div>
                                                             </td>
                                                             <td>{{$data['keyword']}}</td>
-                                                            <td>{{$data['rank']}}</td>
+                                                            <td>
+                                                                @if($data['rank']=="N/A")
+                                                                    <span class="hide">{{$maxRank}}</span><span></span>
+                                                                @else
+                                                                    {{$data['rank']}}
+                                                                @endif
+                                                            </td>
                                                             <td>
                                                                 @if(isset($prevData[$data['keyword']]['day']))
                                                                     @if($prevData[$data['keyword']]['day']['rating']>0)
