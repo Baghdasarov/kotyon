@@ -397,7 +397,7 @@ class DashboardController extends Controller
         unset($group);
 
         $groupSlectPage = $groups;
-        array_unshift($groupSlectPage,'slecet group');
+        array_unshift($groupSlectPage,'All');
 
         return view('rankings', [
             'alldata' => $alldata,
