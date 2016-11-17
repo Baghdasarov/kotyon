@@ -233,6 +233,7 @@ class DashboardController extends Controller
             return $value['rank'];
         }));
 
+        $maxNum = 0;
         foreach ($alldata as $key=>$alldat){
             if($alldat['rank']=="N/A"){
                 $alldata[]=$alldat;
@@ -241,7 +242,6 @@ class DashboardController extends Controller
                 $maxNum[]=$alldat['rank'];
             }
         }
-        $maxRank = max($maxNum)+1;
 
         $prevData = [];
         $dates = [
@@ -408,7 +408,7 @@ class DashboardController extends Controller
             'countryKeyword' => $sortedCountryAddKeyword,
             'group' => $groups,
             'groupSelect' => $groupSlectPage,
-            'maxRank' => $maxRank,
+            'maxRank' => ($maxNum != 0)?max($maxNum)+1:0,
         ]);
 
 
@@ -898,8 +898,9 @@ class DashboardController extends Controller
                 'group' => $group,
                 'country' => $country,
             ];
+            
+            ini_set("max_execution_time","0");
             Keywords::insert($keywords_insert);
-
             $insert_array = $this->getInsertArray($items,$options);
             if($insert_array != false){
                 Search::insert($insert_array);
