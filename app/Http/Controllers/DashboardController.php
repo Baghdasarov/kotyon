@@ -898,7 +898,10 @@ class DashboardController extends Controller
                 'group' => $group,
                 'country' => $country,
             ];
-            
+            if(count($items)>100){
+                $laravel_request->session()->flash('error','You can add only 100 keywords at a time');
+                return redirect('rankings');
+            }
             ini_set("max_execution_time","0");
             Keywords::insert($keywords_insert);
             $insert_array = $this->getInsertArray($items,$options);

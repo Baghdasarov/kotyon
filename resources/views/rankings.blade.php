@@ -91,7 +91,7 @@
                                                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                                         <div class="form-group">
                                                             <label for="comment">Keyword(s)</label>
-                                                            <textarea class="form-control term1" name="term_1" rows="5" id="comment"></textarea>
+                                                            <textarea class="form-control term1" name="term_1" rows="5" placeholder="You can add only 100 keywords at a time" id="comment"></textarea>
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="row">
