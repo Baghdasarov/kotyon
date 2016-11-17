@@ -233,7 +233,7 @@ class DashboardController extends Controller
             return $value['rank'];
         }));
 
-        $maxNum = 0;
+        $maxNum = [];
         foreach ($alldata as $key=>$alldat){
             if($alldat['rank']=="N/A"){
                 $alldata[]=$alldat;
@@ -398,7 +398,6 @@ class DashboardController extends Controller
 
         $groupSlectPage = $groups;
         array_unshift($groupSlectPage,'All');
-
         return view('rankings', [
             'alldata' => $alldata,
             'prevData' => $prevData,
@@ -408,7 +407,7 @@ class DashboardController extends Controller
             'countryKeyword' => $sortedCountryAddKeyword,
             'group' => $groups,
             'groupSelect' => $groupSlectPage,
-            'maxRank' => ($maxNum != 0)?max($maxNum)+1:0,
+            'maxRank' => (!empty($maxNum))?max($maxNum)+1:0,
         ]);
 
 
