@@ -223,50 +223,50 @@ $(document).ready(function(){
             table.column(8).search('').draw()
         }else{
             table.column(8).search(this.value).draw();
-            $.ajax({
-                url: "rankingsJson",
-                data: {groupAll:$(this).val()},
-                success: function(res){
-                    seriesOptions[0] = {
-                        data: res
-                    };
-                    // console.log(seriesOptionsPopUp);
-                    $('#container').highcharts('StockChart', {
+        }
+        $.ajax({
+            url: "rankingsJson",
+            data: {groupAll:$(this).val()},
+            success: function(res){
+                seriesOptions[0] = {
+                    data: res
+                };
+                // console.log(seriesOptionsPopUp);
+                $('#container').highcharts('StockChart', {
 
-                        rangeSelector: {
-                            selected: 4
-                        },
-                        yAxis: {
-                            reversed: true,
-                            labels: {
-                                formatter: function () {
-                                    return (this.value > 0 ? ' + ' : '') + this.value;
-                                }
-                            },
-                            plotLines: [{
-                                value: 0,
-                                width: 2,
-                                color: 'silver'
-                            }]
-                        },
-
-                        plotOptions: {
-                            series: {
-                                compare: 'value'
+                    rangeSelector: {
+                        selected: 4
+                    },
+                    yAxis: {
+                        reversed: true,
+                        labels: {
+                            formatter: function () {
+                                return (this.value > 0 ? ' + ' : '') + this.value;
                             }
                         },
+                        plotLines: [{
+                            value: 0,
+                            width: 2,
+                            color: 'silver'
+                        }]
+                    },
 
-                        tooltip: {
-                            pointFormat: '<span style="color:{series.color}">Average</span>: <b>{point.y}</b> ({point.change})<br/>',
-                            valueDecimals: 2
-                        },
+                    plotOptions: {
+                        series: {
+                            compare: 'value'
+                        }
+                    },
 
-                        series: seriesOptions
-                    });
-                }
-            });
-            removeKeywordFromGroup(countKeyword,keywordsId);
-        }
+                    tooltip: {
+                        pointFormat: '<span style="color:{series.color}">Average</span>: <b>{point.y}</b> ({point.change})<br/>',
+                        valueDecimals: 2
+                    },
+
+                    series: seriesOptions
+                });
+            }
+        });
+        removeKeywordFromGroup(countKeyword,keywordsId);
 
     });
 
