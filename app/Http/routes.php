@@ -19,7 +19,7 @@ Route::get('rankingsJsonOption', 'DashboardController@rankingsJsonOption');
 Route::post('startSearch', 'DashboardController@startSearch');
 Route::get('startSearch', 'DashboardController@startSearch');
 Route::post('changeKeywordGroup', 'DashboardController@changeKeywordGroup');
-
+Route::get('clickability', 'DashboardController@clickability');
 
 Route::post('login', 'LoginController@login');
 Route::get('login', 'LoginController@index');

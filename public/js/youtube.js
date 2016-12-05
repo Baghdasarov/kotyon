@@ -27,7 +27,10 @@ function init(){
 //  document.getElementById("start_scan").onclick = startSearch;
 //  
 //  document.getElementById("download").onclick = download;
-  document.getElementById("lang-select").onchange = setCoordinates;
+
+  if(document.getElementById("lang-select")){
+    document.getElementById("lang-select").onchange = setCoordinates;
+  }
   loc = coords['usa'];
 }
 

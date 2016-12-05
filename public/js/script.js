@@ -184,25 +184,25 @@ $(document).ready(function(){
             series: seriesOptions
         });
     }
+    if($('div').hasClass('for_ajax_load_rankings')){
+        $.each(names, function (i, name) {
+            // var sample = 'https://www.highcharts.com/samples/data/jsonp.php?filename=' + name.toLowerCase() + '-c.json&callback=?';
+            $.getJSON('/rankingsJson', function (data) {
+                seriesOptions[i] = {
+                    name: name,
+                    data: data
+                };
+                // console.log(seriesOptions);
+                // As we're loading the data asynchronously, we don't know what order it will arrive. So
+                // we keep a counter and create the chart when all the data is loaded.
+                seriesCounter += 1;
 
-    $.each(names, function (i, name) {
-        // var sample = 'https://www.highcharts.com/samples/data/jsonp.php?filename=' + name.toLowerCase() + '-c.json&callback=?';
-        $.getJSON('/rankingsJson', function (data) {
-            seriesOptions[i] = {
-                name: name,
-                data: data
-            };
-            // console.log(seriesOptions);
-            // As we're loading the data asynchronously, we don't know what order it will arrive. So
-            // we keep a counter and create the chart when all the data is loaded.
-            seriesCounter += 1;
-
-            if (seriesCounter === names.length) {
-                createChart();
-            }
+                if (seriesCounter === names.length) {
+                    createChart();
+                }
+            });
         });
-    });
-
+    }
     var table = $('#sample_1').DataTable({
         "aLengthMenu": [[25, 50, 100], [25, 50, 100]],
         "iDisplayLength": 25
@@ -621,6 +621,42 @@ $(document).ready(function(){
 
     });
 
+
+
+    $(".loading").hide();
+    if($('div').hasClass("for_ajax_load")){
+        $(".loading").show();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-Token': $('input[name="_token"]').val()
+            }
+        });
+        $.ajax({
+            method: "get",
+            url: "clickability",
+            success: function(res){
+                // console.log(res);
+                $.each(res,function (item,value) {
+                    var valRes = [];
+                    valRes = res[item];
+
+                    // console.log(valRes);
+
+                    seriasPieChartData =
+                    [{
+                        name: item,
+                        colorByPoint: true,
+                        data:
+                            valRes
+                    }]
+                    $(".loading").hide();
+                    // console.log(seriasPieChartData);
+                    pie_chart("pie_chart_"+item,seriasPieChartData,item,false);
+                })
+            }
+        });
+    }
+
 });
 
 function removeKeywordFromGroup(countKeyword,keywords) {
@@ -629,6 +665,7 @@ function removeKeywordFromGroup(countKeyword,keywords) {
         $('#removeKeywordFromGroupModal').modal('show');
         $('#removeKeywordFromGroupModal .modal-body').text("Are you saying you want to remove "+ countKeyword +" keywords from "+ $('#groups option:selected').val() +" keyword group?");
         $(".removeKeywordGroupConfirm").click(function () {
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-Token': $('input[name="_token"]').val()
@@ -667,4 +704,43 @@ function removeKeywordFromGroup(countKeyword,keywords) {
             'Please select group' +
             '</div>')
     }
+}
+
+function pie_chart(chart,seriasPieChartData,chartName,bold){
+    // console.log(seriasPieChartData);
+    $("#"+chart).highcharts('StockChart', {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: chartName,
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>:{point.percentage:.1f} %',
+                    style: {
+                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                        fontWeight: '400'
+                    },
+                }
+            }
+        },
+        legend: {
+            enabled: true
+        },
+        navigator: {
+            enabled: false
+        },
+        series: seriasPieChartData
+    });
 }

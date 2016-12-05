@@ -121,7 +121,7 @@ class DashboardController extends Controller
 				if(!isset($array[1])){
                     $array[1] = [strtotime($date)*1000, (int)$items[0]->rating];
 				}
-		$keyCount++ ;
+		        $keyCount++ ;
             }
              
         }
@@ -412,6 +412,140 @@ class DashboardController extends Controller
 
 
     }
+
+    public function clickability(Request $laravel_request){
+        if($laravel_request->session()->has('user_id')){
+            $channel_session = session('default_channel');
+
+            $groupsQuery =
+                Keywords:://select('group')->
+                      where('channel_id', $channel_session->channelid)
+                    ->where('user_id',$channel_session->user_id)
+                    ->where('group', '!=' , '')
+                    ->distinct()
+                    ->get()
+                    ->toArray();
+            $group=[];
+
+            foreach ($groupsQuery as $groupQuery){
+                if($groupQuery['group'] != ""){
+                    $ob = json_decode($groupQuery['group']);
+                    if($ob === null) {
+                        $group[$groupQuery['group']]=$groupQuery['group'];
+                    }else{
+                        $newGroupArr[] = $ob;
+                    }
+                };
+            };
+
+            if(isset($newGroupArr) && !empty($newGroupArr)){
+                foreach ($newGroupArr as $newGroupAr){
+                    foreach ($newGroupAr as $newGr) {
+                        $group[] = $newGr;
+                    }
+                }
+            }
+            $group = array_unique($group);
+
+            foreach ($group as $ke=>$grou){
+                $grouKey = str_replace(' ','_',$grou);
+                $groupsCharts[$grouKey]=$grou;
+            }
+            unset($group);
+
+            if($laravel_request->ajax()){
+                $allTerms =Keywords::
+                    where('channel_id', $channel_session->channelid)
+                    ->where('group', '!=' , '')
+                    ->where('user_id',$channel_session->user_id)
+                    ->get()
+                    ->toArray();
+
+                foreach ($allTerms as $keyCount=>$allTerm){
+                    $AllTermGroupDecode = json_decode($allTerm['group']);
+                        if($AllTermGroupDecode === null) {
+                                $getTerm[$allTerm['group']][$keyCount] = $allTerm;
+                        }else{
+                            foreach ($groupsCharts as $key=>$groupsChart){
+                                if(in_array($groupsChart,$AllTermGroupDecode)){
+                                    $getTerm[$key][$keyCount]= $allTerm;
+                                }
+                            }
+
+                        }
+                }
+
+                $rankScore=[1=>15,2=>12.5,3=>10.5,4=>8,5=>7.5,6=>6.5,7=>5.5,8=>5,9=>4.5,10=>3.5,11=>3,12=>3,13=>2.15,14=>2,15=>2,16=>1.5,17=>1.5,18=>1,19=>1,20=>1,21=>0.35,22=>0.3,23=>0.3,24=>0.25,25=>0.25,26=>0.25,27=>0.2,28=>0.2,29=>0.2,30=>0.15,31=>0.15,32=>0.15,33=>0.1,34=>0.1,35=>0.1,36=>0.1,37=>0.05,38=>0.05,39=>0.05,40=>0.05];
+                $rankRes=[];
+                $elseiObject=[];
+                $elseiString='';
+                foreach ($getTerm as $getTerKey => $getTer){
+                    foreach ($getTer as $getTerKeyChild=>$getTr){
+                        $count=1;
+//                        if($getTerKey=="Second"){
+                            $getVideo = $this->getVideos($getTr['keyword'], $max_res=40, $lang='us',40);
+
+                            foreach ($getVideo as $video_id => $getVid){
+
+//                                if($getVid['snippet']['channelId']==$channel_session->channelid){
+                                      if(!isset($rankRes[$getTerKey][$getVid['snippet']['channelId']]['quantity'])){
+                                          $rankRes[$getTerKey][$getVid['snippet']['channelId']]['quantity'] = 1;
+                                          $rankRes[$getTerKey][$getVid['snippet']['channelId']]['score'] = $rankScore[$count];
+                                          $rankRes[$getTerKey][$getVid['snippet']['channelId']]['title'] = $getVid['snippet']['channelTitle'];
+                                      }else{
+                                          $rankRes[$getTerKey][$getVid['snippet']['channelId']]['score'] += $rankScore[$count];
+                                          $rankRes[$getTerKey][$getVid['snippet']['channelId']]['quantity'] += 1;
+                                      }
+//                                }
+//                                else{
+//                                    if(strpos($elseiString,$getVid['snippet']['channelId'])!=false){
+//                                        $elseiObject[$getVid['snippet']['channelId']]['score'] += $rankScore[$count];
+//                                        $elseiObject[$getVid['snippet']['channelId']]['quantity'] += 1;
+//                                    }else{
+//                                        $elseiObject[$getVid['snippet']['channelId']]['score'] = $rankScore[$count];
+//                                        $elseiObject[$getVid['snippet']['channelId']]['quantity'] = 1;
+//                                        $elseiObject[$getVid['snippet']['channelId']]['title'] = $getVid['snippet']['channelTitle'];
+//                                        $elseiString .= $getVid['snippet']['channelId'] . ' ';
+//                                    }
+//
+//                                }
+                                $count++;
+                            }
+                    }
+                }
+//                dd($rankRes);
+                $getMyChanelRes=[];
+
+                foreach ($rankRes as $keyRes=>$rankR){
+                    $stepCount = 0;
+                    foreach ($rankR as $keyRankAll => $rankAll){
+                        if($rankR[$keyRankAll] == $channel_session->channelid){
+                            $getMyChanelRes[$keyRes][$stepCount]['name'] = $rankR[$keyRankAll]['title'];
+                            $getMyChanelRes[$keyRes][$stepCount]['y'] = $rankR[$keyRankAll]['score']/$rankR[$keyRankAll]['quantity'];
+                            $getMyChanelRes[$keyRes][$stepCount]['bold'] = true;
+                        }else{
+                            $getMyChanelRes[$keyRes][$stepCount]['name'] = $rankR[$keyRankAll]['title'];
+                            $getMyChanelRes[$keyRes][$stepCount]['y'] = $rankR[$keyRankAll]['score']/$rankR[$keyRankAll]['quantity'];
+                            $getMyChanelRes[$keyRes][$stepCount]['bold'] = false;
+                        }
+
+                        $stepCount++;
+                    }
+
+
+
+                }
+
+//                dd($getMyChanelRes);
+
+                return response()->json($getMyChanelRes);
+            }
+
+            return view('clickability',compact('groupsCharts'));
+        }else{
+            return redirect('login');
+        }
+    }
     public function changeKeywordGroup(Request $request){
         $postKeywords = $request->input('keyword');
         $postGroup = $request->input('group');
@@ -674,7 +808,7 @@ class DashboardController extends Controller
         return $resp;
     }
 
-    protected function getVideos($term, $max_res=100, $lang='us')
+    protected function getVideos($term, $max_res=100, $lang='us',$max_res_new=50)
     {
         $i = 1;
         $videos = [];
@@ -691,7 +825,7 @@ class DashboardController extends Controller
         for($i; $i>0; $i--){
             $params = [
               'part' => 'snippet',
-              'maxResults' => '50',
+              'maxResults' => $max_res_new,
               'order' => 'relevance',
               'q' => $term,
               'regionCode' => $lang,
