@@ -518,34 +518,56 @@ class DashboardController extends Controller
 //                                }
                                 $count++;
                             }
+
                     }
                 }
 //                dd($rankRes);
                 $getMyChanelRes=[];
-
+                $price = array();
                 foreach ($rankRes as $keyRes=>$rankR){
                     $stepCount = 0;
                     foreach ($rankR as $keyRankAll => $rankAll){
-                        if($rankR[$keyRankAll] == $channel_session->channelid){
+
                             $getMyChanelRes[$keyRes][$stepCount]['name'] = $rankR[$keyRankAll]['title'];
                             $getMyChanelRes[$keyRes][$stepCount]['y'] = $rankR[$keyRankAll]['score']/$rankR[$keyRankAll]['quantity'];
                             $getMyChanelRes[$keyRes][$stepCount]['bold'] = true;
-                        }else{
-                            $getMyChanelRes[$keyRes][$stepCount]['name'] = $rankR[$keyRankAll]['title'];
-                            $getMyChanelRes[$keyRes][$stepCount]['y'] = $rankR[$keyRankAll]['score']/$rankR[$keyRankAll]['quantity'];
-                            $getMyChanelRes[$keyRes][$stepCount]['bold'] = false;
-                        }
-
+//                        }else{
+//                            $getMyChanelRes[$keyRes][$stepCount]['name'] = $rankR[$keyRankAll]['title'];
+//                            $getMyChanelRes[$keyRes][$stepCount]['y'] = $rankR[$keyRankAll]['score']/$rankR[$keyRankAll]['quantity'];
+//                            $getMyChanelRes[$keyRes][$stepCount]['bold'] = false;
+//                        }
+                        $getMyChanelRes[$keyRes][$stepCount] = array_values(array_sort($getMyChanelRes[$keyRes], function ($value) {
+                            return $value['y'];
+                        }));
+                        $getMyChanelRes[$keyRes] = array_reverse($getMyChanelRes[$keyRes][$stepCount]);
                         $stepCount++;
                     }
+//                    dd($getMyChanelRes);
+                }
 
+                $getEndResult=[];
+                foreach ($getMyChanelRes as $groupKey=>$getMyChanelR){
+                    foreach ($getMyChanelR as $nKey=>$getMyChanel){
+                        if($nKey>9){
+                            if(!isset($getEndResult[$groupKey][10]['y'])){
+                                $getEndResult[$groupKey][10]['name']='Other';
+                                $getEndResult[$groupKey][10]['y']=$getMyChanel['y'];
+                            }else{
+                                $getEndResult[$groupKey][10]['name']='Other';
+                                $getEndResult[$groupKey][10]['y']+=$getMyChanel['y'];
+                            }
+                        }else{
+                            $getEndResult[$groupKey][$nKey]['name'] = $getMyChanelRes[$groupKey][$nKey]['name'];
+                            $getEndResult[$groupKey][$nKey]['y'] = $getMyChanelRes[$groupKey][$nKey]['y'];
+                            $getEndResult[$groupKey][$nKey]['bold'] = $getMyChanelRes[$groupKey][$nKey]['bold'];
+                        }
+                    }
 
 
                 }
 
-//                dd($getMyChanelRes);
 
-                return response()->json($getMyChanelRes);
+                return response()->json($getEndResult);
             }
 
             return view('clickability',compact('groupsCharts'));

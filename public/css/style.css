@@ -256,7 +256,26 @@ table.dataTable thead th:first-child {
     -moz-animation: spinoffPulse 1s infinite linear;
     -webkit-animation: spinoffPulse 1s infinite linear;
 }
-
+.clickabilitiSimpleAlert{
+    background: rgb(38, 52, 75);
+    color: #fff;
+    font-size: 11px;
+    position: relative;
+    text-align: center;
+}
+.clickabilitiSimpleAlert p{
+    width: 90%;
+    margin: auto;
+    padding: 15px 10px;
+}
+.clickabilitiSimpleAlert span{
+    position: absolute;
+    top: 0px;
+    right: 10px;
+    font-size: 15px;
+    padding: 4px;
+    cursor: pointer;
+}
 @-moz-keyframes spinPulse {
     0% {
         -moz-transform: rotate(160deg);

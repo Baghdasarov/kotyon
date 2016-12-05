@@ -20,6 +20,12 @@
                     <!-- BEGIN CONTENT BODY -->
                     <div class="page-content">
                         <p class="page_header">Clickability</p>
+                        <div class="clickabilitiSimpleAlert">
+                            <p>
+                                Clickability is the estimated likelihood that a user will click on any given video from a channel in the organic search results. A score is given the higher ranked a video is, down to lowest ranked video at #40 - having multiple videos ranking from a specific search result, will result in a higher likelihood of a click , and higher score. This is done per Keyword Group. Updated once per week
+                            </p>
+                            <span class="clickabilityAlertClose">X</span>
+                        </div>
                         <div class="row">
                             <div class="dashboard-stat2 ">
                                 @foreach($groupsCharts as $key=>$groupsChart)

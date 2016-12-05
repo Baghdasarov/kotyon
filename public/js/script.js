@@ -636,6 +636,10 @@ $(document).ready(function(){
 
     $(".loading").hide();
     if($('div').hasClass("for_ajax_load")){
+        $(".clickabilitiSimpleAlert").show();
+        $(".clickabilityAlertClose").click(function () {
+            $(".clickabilitiSimpleAlert").hide();
+        });
         $(".loading").show();
         $.ajaxSetup({
             headers: {
@@ -662,7 +666,7 @@ $(document).ready(function(){
                     }]
                     $(".loading").hide();
                     // console.log(seriasPieChartData);
-                    pie_chart("pie_chart_"+item,seriasPieChartData,item,false);
+                    pie_chart("pie_chart_"+item,seriasPieChartData,item);
                 })
             }
         });
@@ -717,7 +721,7 @@ function removeKeywordFromGroup(countKeyword,keywords) {
     }
 }
 
-function pie_chart(chart,seriasPieChartData,chartName,bold){
+function pie_chart(chart,seriasPieChartData,chartName){
     // console.log(seriasPieChartData);
     $("#"+chart).highcharts('StockChart', {
         chart: {
