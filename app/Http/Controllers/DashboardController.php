@@ -416,7 +416,10 @@ class DashboardController extends Controller
     public function clickability(Request $laravel_request){
         if($laravel_request->session()->has('user_id')){
             $channel_session = session('default_channel');
-
+            if(!$laravel_request->session()->has('default_channel')){
+                $laravel_request->session()->flash('error', 'Add a channel first');
+                return redirect()->back();
+            }
             $groupsQuery =
                 Keywords:://select('group')->
                       where('channel_id', $channel_session->channelid)
@@ -427,6 +430,10 @@ class DashboardController extends Controller
                     ->toArray();
             $group=[];
 
+            if(empty($groupsQuery)){
+                $laravel_request->session()->flash('error', 'Please add keyword in group');
+                return redirect()->back();
+            }
             foreach ($groupsQuery as $groupQuery){
                 if($groupQuery['group'] != ""){
                     $ob = json_decode($groupQuery['group']);

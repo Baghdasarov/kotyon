@@ -1,4 +1,15 @@
 $(document).ready(function(){
+    $(".nav-item a").each(function(index,value) {
+        if (value.href == window.location.href) {
+            $(this).parent().addClass("start active open");
+            $(this).find('.arrow').addClass('open');
+            $(this).append("<span class='selected'></span>");
+        } else {
+            $(this).parent().removeClass("start active open");
+            $(this).find('.arrow').removeClass('open');
+            $(this).find('.selected').remove();
+        }
+    })
     $('#start_search').click(function(){
         if($('#lang-select').val() == 'none'){
             alert('choose country');
