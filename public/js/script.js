@@ -655,8 +655,6 @@ $(document).ready(function(){
                     var valRes = [];
                     valRes = res[item];
 
-                    // console.log(valRes);
-
                     seriasPieChartData =
                     [{
                         name: item,
@@ -665,12 +663,105 @@ $(document).ready(function(){
                             valRes
                     }]
                     $(".loading").hide();
-                    // console.log(seriasPieChartData);
-                    pie_chart("pie_chart_"+item,seriasPieChartData,item);
+                    // var myChanel=res[item][0].bold;
+                    // console.log(myChanel);
+                    pie_chart("pie_chart_"+item,seriasPieChartData,item.replace('____'," "));
                 })
             }
         });
     }
+    $(document).on('click', '.groupnameClickability', function() {
+        var seriesOptionsPopUp = [];
+        $.ajax({
+            url: "rankingsJson",
+            data: {groupAll:$(this).data('groupname')},
+            success: function(res){
+                seriesOptionsPopUp[0] = {
+                    data: res
+                };
+                $("#showGraphModalClickability").modal('show');
+                // console.log(seriesOptionsPopUp);
+                $('#showGraphModalBodyClickability').highcharts('StockChart', {
+
+                    chart: {
+                        renderTo: 'showGraphModalBody',
+                        type: 'line',
+                        // Explicitly tell the width and height of a chart
+                        width: 900,
+                        height: 500
+                    },
+                    navigator: {
+                        enabled: false
+                    },
+                    rangeSelector: {
+                        inputEnabled:false,
+                        allButtonsEnabled: false,
+                        buttons: [{
+                            type: 'day',
+                            count: 7,
+                            text: '1 Week',
+                            // dataGrouping: {
+                            //     forced: true,
+                            //     units: [['day', [1]]]
+                            // }
+                        }, {
+                            type: 'week',
+                            count: 5,
+                            text: '1 Month',
+                            // dataGrouping: {
+                            //     forced: true,
+                            //     units: [['week', [1]]]
+                            // }
+                        },{
+                            type: 'month',
+                            count: 6,
+                            text: '6 Month',
+                            // dataGrouping: {
+                            //     forced: true,
+                            //     units: [['month', [1]]]
+                            // }
+                        }, {
+                            type: 'all',
+                            text: 'All',
+                        }],
+                        buttonTheme: {
+                            width: 60
+                        },
+                        selected: 0
+                    },
+
+
+                    yAxis: {
+                        reversed: true,
+                        labels: {
+                            formatter: function () {
+                                return (this.value > 0 ? ' + ' : '') + this.value;
+                            }
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 2,
+                            color: 'silver'
+                        }]
+                    },
+
+                    plotOptions: {
+                        series: {
+                            compare: 'value'
+                        }
+                    },
+
+                    tooltip: {
+                        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change})<br/>',
+                        valueDecimals: 2
+                    },
+
+                    series: seriesOptionsPopUp
+                });
+            }
+        });
+    })
+
 
 });
 
@@ -722,7 +813,7 @@ function removeKeywordFromGroup(countKeyword,keywords) {
 }
 
 function pie_chart(chart,seriasPieChartData,chartName){
-    // console.log(seriasPieChartData);
+
     $("#"+chart).highcharts('StockChart', {
         chart: {
             plotBackgroundColor: null,
@@ -731,21 +822,25 @@ function pie_chart(chart,seriasPieChartData,chartName){
             type: 'pie'
         },
         title: {
-            text: chartName,
+            useHTML: true,
+            text: "<span class='groupnameClickability' data-groupname='"+chartName+"'>"+chartName+"</span>",
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
         },
         plotOptions: {
             pie: {
-                allowPointSelect: true,
+                allowPointSelect: false,
                 cursor: 'pointer',
+                marker: {
+                    enabled: true
+                },
                 dataLabels: {
                     enabled: true,
-                    format: '<b>{point.name}</b>:{point.percentage:.1f} %',
+                    useHTML:true,
+                    format: '<span class="{point.bold}">{point.name}:{point.percentage:.1f} %</span>',
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
-                        fontWeight: '400'
                     },
                 }
             }

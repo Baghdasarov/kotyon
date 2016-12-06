@@ -31,12 +31,37 @@
                                 @foreach($groupsCharts as $key=>$groupsChart)
                                     <div class="pie_chart" id="pie_chart_{{$key}}" data-chart="pie_chart_{{$key}}"></div>
                                 @endforeach
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <!-- Modal Start here-->
+
+                                        <div class="modal fade" id="showGraphModalClickability" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                        <h4 class="modal-title" id="showGraphModalModalLabel">Show Graph</h4>
+                                                    </div>
+                                                    <div class="modal-body" id="showGraphModalBodyClickability">
+
+                                                    </div>
+                                                    <div class="modal-footer">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal ends Here -->
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     @include('layouts.footer')
         <div class="loading">
             <div class="circle2"></div>

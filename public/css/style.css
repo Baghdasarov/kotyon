@@ -180,7 +180,23 @@ table.dataTable thead th:first-child {
     overflow: hidden;
     padding: 0px;
 }
+#showGraphModalBodyClickability{
+    overflow: hidden;
+    padding: 0px;
+}
+.clickPieBold{
+    font-weight: 700;
+    color:#17c4bb;
+    /*font-size: 50px;*/
+}
+.clickPieNotBold{
+    font-weight: 400;
+    color:black;
+}
 #showGraphModal .modal-dialog{
+    width: 70%;
+}
+#showGraphModalClickability .modal-dialog{
     width: 70%;
 }
 .selectboxSpace{
@@ -274,6 +290,9 @@ table.dataTable thead th:first-child {
     right: 10px;
     font-size: 15px;
     padding: 4px;
+    cursor: pointer;
+}
+.groupnameClickability{
     cursor: pointer;
 }
 @-moz-keyframes spinPulse {
