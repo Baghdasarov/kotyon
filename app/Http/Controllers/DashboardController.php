@@ -508,24 +508,23 @@ class DashboardController extends Controller
                 $rankRes=[];
                 $elseiObject=[];
                 $elseiString='';
+//                $quantity=1;
                 foreach ($getTerm as $getTerKey => $getTer){
                     foreach ($getTer as $getTerKeyChild=>$getTr){
+//                        $quantity = count($getTerm);
                         $count=1;
+//                        var_dump($getTr['keyword']);
 //                        if($getTerKey=="Second"){
                             $getVideo = $this->getVideos($getTr['keyword'], $max_res=40, $lang='us',40);
 
                             foreach ($getVideo as $video_id => $getVid){
-
-//                                if($getVid['snippet']['channelId']==$channel_session->channelid){
-                                      if(!isset($rankRes[$getTerKey][$getVid['snippet']['channelId']]['quantity'])){
-                                          $rankRes[$getTerKey][$getVid['snippet']['channelId']]['quantity'] = 1;
-                                          $rankRes[$getTerKey][$getVid['snippet']['channelId']]['score'] = $rankScore[$count];
-                                          $rankRes[$getTerKey][$getVid['snippet']['channelId']]['title'] = $getVid['snippet']['channelTitle'];
-                                      }else{
-                                          $rankRes[$getTerKey][$getVid['snippet']['channelId']]['score'] += $rankScore[$count];
-                                          $rankRes[$getTerKey][$getVid['snippet']['channelId']]['quantity'] += 1;
-                                      }
-//                                }
+                                  if(!isset($rankRes[$getTerKey][$getVid['snippet']['channelId']]['quantity'])){
+                                      $rankRes[$getTerKey][$getVid['snippet']['channelId']]['score'] = $rankScore[$count];
+                                      $rankRes[$getTerKey][$getVid['snippet']['channelId']]['title'] = $getVid['snippet']['channelTitle'];
+                                      $rankRes[$getTerKey]['quantity'] = count($getTerm[$getTerKey]);
+                                  }else{
+                                      $rankRes[$getTerKey][$getVid['snippet']['channelId']]['score'] += $rankScore[$count];
+                                  }
 //                                else{
 //                                    if(strpos($elseiString,$getVid['snippet']['channelId'])!=false){
 //                                        $elseiObject[$getVid['snippet']['channelId']]['score'] += $rankScore[$count];
@@ -543,14 +542,15 @@ class DashboardController extends Controller
 
                     }
                 }
-
+//dd($rankRes);
                 $getMyChanelRes=[];
                 $price = array();
                 foreach ($rankRes as $keyRes=>$rankR){
                     $stepCount = 0;
                     foreach ($rankR as $keyRankAll => $rankAll){
+
                             $getMyChanelRes[$keyRes][$stepCount]['name'] = $rankR[$keyRankAll]['title'];
-                            $getMyChanelRes[$keyRes][$stepCount]['y'] = $rankR[$keyRankAll]['score']/$rankR[$keyRankAll]['quantity'];
+                            $getMyChanelRes[$keyRes][$stepCount]['y'] = $rankR[$keyRankAll]['score']/$rankRes[$keyRes]['quantity'];
                             if($keyRankAll == $channel_session->channelid){
                                 $getMyChanelRes[$keyRes][$stepCount]['bold'] = 'clickPieBold';
                             }else{
@@ -594,6 +594,7 @@ class DashboardController extends Controller
                     }
                     ksort($getEndResult[$groupKey]);
                 }
+//                dd($getEndResult);
                 return response()->json($getEndResult);
             }
             return view('clickability',compact('groupsCharts'));
