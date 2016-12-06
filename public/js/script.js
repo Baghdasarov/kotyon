@@ -823,7 +823,7 @@ function pie_chart(chart,seriasPieChartData,chartName){
         },
         title: {
             useHTML: true,
-            text: "<span class='groupnameClickability' data-groupname='"+chartName+"'>"+chartName+"</span>",
+            text: "<span class='groupnameClickability' data-groupname='"+chartName+"'>"+chartName+" Click to view chart</span>",
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
