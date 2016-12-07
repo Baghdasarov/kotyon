@@ -164,6 +164,7 @@ class ClickabilityWeek extends Command
                 }
 
                 $getEndResult = [];
+                $data_chart='';
                 foreach ($getMyChanelRes as $groupKey => $getMyChanelR) {
                     $count = 1;
                     foreach ($getMyChanelR as $nKey => $getMyChanel) {

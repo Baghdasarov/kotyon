@@ -18,8 +18,8 @@ class CreateClickabilityTable extends Migration
             $table->integer('user_id');
             $table->longText('data');
             $table->string('data_chart');
-            $table->timestamp('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
+            $table->timestamp('created_at');
+            $table->timestamp('updated_at');
         });
     }
 
