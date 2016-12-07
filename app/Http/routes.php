@@ -15,6 +15,7 @@ Route::get('/', 'DashboardController@index');
 Route::get('dashboard', 'DashboardController@index');
 Route::get('rankings/{csv?}', 'DashboardController@rankings');
 Route::get('rankingsJson', 'DashboardController@rankingsJson');
+Route::get('clickabilityJson', 'DashboardController@clickabilityJson');
 Route::get('rankingsJsonOption', 'DashboardController@rankingsJsonOption');
 Route::post('startSearch', 'DashboardController@startSearch');
 Route::get('startSearch', 'DashboardController@startSearch');

@@ -650,7 +650,6 @@ $(document).ready(function(){
             method: "get",
             url: "clickability",
             success: function(res){
-                // console.log(res);
                 $.each(res,function (item,value) {
                     var valRes = [];
                     valRes = res[item];
@@ -673,12 +672,15 @@ $(document).ready(function(){
     $(document).on('click', '.groupnameClickability', function() {
         var seriesOptionsPopUp = [];
         $.ajax({
-            url: "rankingsJson",
-            data: {groupAll:$(this).data('groupname')},
+            url: "clickabilityJson",
+            // data: {groupAll:$(this).data('groupname')},
             success: function(res){
+                // console.log(res);
                 seriesOptionsPopUp[0] = {
-                    data: res
+                    name: res['name'],
+                    data: res['data']
                 };
+                console.log(seriesOptionsPopUp);
                 $("#showGraphModalClickability").modal('show');
                 // console.log(seriesOptionsPopUp);
                 $('#showGraphModalBodyClickability').highcharts('StockChart', {
@@ -838,7 +840,7 @@ function pie_chart(chart,seriasPieChartData,chartName){
                 dataLabels: {
                     enabled: true,
                     useHTML:true,
-                    format: '<span class="{point.bold}">{point.name}:{point.percentage:.1f} %</span>',
+                    format: '<span class="{point.bold}">{point.otherCount} {point.name}:{point.percentage:.1f} %</span>',
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
                     },
