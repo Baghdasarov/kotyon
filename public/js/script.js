@@ -650,7 +650,7 @@ $(document).ready(function(){
             method: "get",
             url: "clickability",
             success: function(res){
-                if(res!='empty'){
+                if(res != 'empty'){
                     $.each(res,function (item,value) {
                         var valRes = [];
                         valRes = res[item];
@@ -683,9 +683,8 @@ $(document).ready(function(){
                     name: res['name'],
                     data: res['data']
                 };
-                console.log(seriesOptionsPopUp);
-                $("#showGraphModalClickability").modal('show');
                 // console.log(seriesOptionsPopUp);
+                $("#showGraphModalClickability").modal('show');
                 $('#showGraphModalBodyClickability').highcharts('StockChart', {
 
                     chart: {
