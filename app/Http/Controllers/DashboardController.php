@@ -512,7 +512,7 @@ class DashboardController extends Controller
             ->get()->toArray();
 
         foreach ($getDataCharts as $key=>$getDataChart){
-            $data['data'][$key] = $getDataChart['data_chart'];
+            $data['data'][$key] = floatval($getDataChart['data_chart']);
         }
         if(!isset($data['data'][1])){
             $data['data'][1] = $data['data'][0];
