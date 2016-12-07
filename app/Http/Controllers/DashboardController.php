@@ -490,6 +490,7 @@ class DashboardController extends Controller
                     select('data')
                     ->where('channel_id', $channel_session->channelid)
                     ->where('user_id',$channel_session->user_id)
+                    ->orderBy('created_at','desc')
                     ->get()->toArray();
                 if(!empty($getEndResult)){
                     $data = json_decode($getEndResult[0]['data']);
