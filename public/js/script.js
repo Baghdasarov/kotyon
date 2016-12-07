@@ -650,22 +650,25 @@ $(document).ready(function(){
             method: "get",
             url: "clickability",
             success: function(res){
-                $.each(res,function (item,value) {
-                    var valRes = [];
-                    valRes = res[item];
+                if(res!='empty'){
+                    $.each(res,function (item,value) {
+                        var valRes = [];
+                        valRes = res[item];
 
-                    seriasPieChartData =
-                    [{
-                        name: item,
-                        colorByPoint: true,
-                        data:
-                            valRes
-                    }]
+                        seriasPieChartData =
+                            [{
+                                name: item,
+                                colorByPoint: true,
+                                data:
+                                valRes
+                            }]
+                        $(".loading").hide();
+                        pie_chart("pie_chart_"+item,seriasPieChartData,item.replace('____'," "));
+                    })
+                }else{
+                    $(".clickabilitiSimpleAlert").before("<div class='alert alert-info'><strong>Info!</strong> There is no data in you DB.</div>");
                     $(".loading").hide();
-                    // var myChanel=res[item][0].bold;
-                    // console.log(myChanel);
-                    pie_chart("pie_chart_"+item,seriasPieChartData,item.replace('____'," "));
-                })
+                }
             }
         });
     }

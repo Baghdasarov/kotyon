@@ -26,6 +26,7 @@
                             </p>
                             <span class="clickabilityAlertClose">X</span>
                         </div>
+
                         <div class="row">
                             <div class="dashboard-stat2 ">
                                 @foreach($groupsCharts as $key=>$groupsChart)

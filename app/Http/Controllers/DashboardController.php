@@ -485,15 +485,18 @@ class DashboardController extends Controller
                 $groupsCharts[$grouKey]=$grou;
             }
             unset($group);
-
             if($laravel_request->ajax()){
                 $getEndResult = Clickability::
                     select('data')
                     ->where('channel_id', $channel_session->channelid)
                     ->where('user_id',$channel_session->user_id)
                     ->get()->toArray();
-                $data = json_decode($getEndResult[0]['data']);
-                return response()->json($data);
+                if(!empty($getEndResult)){
+                    $data = json_decode($getEndResult[0]['data']);
+                    return response()->json($data);
+                }else{
+                    return response()->json('empty');
+                }
             }
             return view('clickability',compact('groupsCharts'));
         }else{
@@ -509,7 +512,7 @@ class DashboardController extends Controller
             ->get()->toArray();
 
         foreach ($getDataCharts as $key=>$getDataChart){
-            $data['data'][$key] = intval($getDataChart['data_chart']);
+            $data['data'][$key] = $getDataChart['data_chart'];
         }
         if(!isset($data['data'][1])){
             $data['data'][1] = $data['data'][0];
