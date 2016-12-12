@@ -518,12 +518,11 @@ class DashboardController extends Controller
                 $arrayOb = get_object_vars($ob);
                 foreach ($arrayOb as $keyOb=>$arrayO){
                     if($groupKey == $keyOb){
-                        $data['data'][$key] = floatval($arrayO);
+                        $data['data'][$key] = floatval(number_format($arrayO, 2));
                     }
                 }
             }else{
-                $data['data'][$key] = floatval($getDataChart['data_chart']);
-
+                $data['data'][$key] = floatval(number_format($getDataChart['data_chart'], 2));
             }
         }
         if(!isset($data['data'][0])){
