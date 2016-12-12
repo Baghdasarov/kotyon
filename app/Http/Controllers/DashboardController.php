@@ -511,13 +511,13 @@ class DashboardController extends Controller
                 ->where('channel_id', $channel_session->channelid)
                 ->where('user_id',$channel_session->user_id)
                 ->get()->toArray();
-
+        $groupKey = str_replace(' ','____',$request->input('groupAll'));
         foreach ($getDataCharts as $key=>$getDataChart){
             $ob = json_decode($getDataChart['data_chart']);
             if(is_object($ob)) {
                 $arrayOb = get_object_vars($ob);
                 foreach ($arrayOb as $keyOb=>$arrayO){
-                    if($request->input('groupAll') == $keyOb){
+                    if($groupKey == $keyOb){
                         $data['data'][$key] = floatval($arrayO);
                     }
                 }
@@ -526,7 +526,10 @@ class DashboardController extends Controller
 
             }
         }
-        if(!isset($data['data'][1])){
+        if(!isset($data['data'][0])){
+            $data['data'][0] = 0;
+            $data['data'][1] = 0;
+        }elseif(!isset($data['data'][1])){
             $data['data'][1] = $data['data'][0];
         }
         $data['name'] = $channel_session->channelname;
