@@ -676,7 +676,7 @@ $(document).ready(function(){
         var seriesOptionsPopUp = [];
         $.ajax({
             url: "clickabilityJson",
-            // data: {groupAll:$(this).data('groupname')},
+            data: {groupAll:$(this).data('groupname')},
             success: function(res){
                 // console.log(res);
                 seriesOptionsPopUp[0] = {
@@ -736,7 +736,6 @@ $(document).ready(function(){
 
 
                     yAxis: {
-                        reversed: true,
                         labels: {
                             formatter: function () {
                                 return (this.value > 0 ? ' + ' : '') + this.value;
@@ -830,6 +829,13 @@ function pie_chart(chart,seriasPieChartData,chartName){
             text: "<span class='groupnameClickability' data-groupname='"+chartName+"'><span style='font-size: 22px;font-weight: 700'>"+chartName+"</span><span style='font-size: 16px;font-weight: 400'> - Click to View Chart</span>",
         },
         tooltip: {
+            borderWidth: 0,
+            backgroundColor: "rgba(255,255,255,0)",
+            borderRadius: 0,
+            shadow: false,
+            useHTML: true,
+            style:{color:'white'},
+            backgroundColor: "rgba(23,196,187,1)",
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
         },
         plotOptions: {
@@ -841,7 +847,6 @@ function pie_chart(chart,seriasPieChartData,chartName){
                 },
                 dataLabels: {
                     enabled: true,
-                    useHTML:true,
                     format: '<span class="{point.bold}">{point.otherCount} {point.name}:{point.percentage:.1f} %</span>',
                     style: {
                         color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
@@ -857,4 +862,67 @@ function pie_chart(chart,seriasPieChartData,chartName){
         },
         series: seriasPieChartData
     });
+
+    // {
+    //     chart: {
+    //         type: 'pie'
+    //     },
+    //     title: {
+    //         text: 'World\'s largest cities per 2014'
+    //     },
+    //     subtitle: {
+    //         text: 'Source: <a href="http://en.wikipedia.org/wiki/List_of_cities_proper_by_population">Wikipedia</a>'
+    //     },
+    //
+    //     legend: {
+    //         enabled: false,
+    //     },
+    //     tooltip: {
+    //             borderWidth: 0,
+    //             backgroundColor: "rgba(255,255,255,0)",
+    //             borderRadius: 0,
+    //             shadow: false,
+    //             useHTML: true,
+    //             backgroundColor: "rgba(23,196,187,1)",
+    //
+    //             pointFormat: 'Population in 2008: <b>{point.y:.1f} millions</b>'
+    //     },
+    //     series: [{
+    //         name: 'Population',
+    //         data: [
+    //             ['Shanghai', 23.7],
+    //             ['Lagos', 16.1],
+    //             ['Istanbul', 14.2],
+    //             ['Karachi', 14.0],
+    //             ['Mumbai', 12.5],
+    //             ['Moscow', 12.1],
+    //             ['São Paulo', 11.8],
+    //             ['Beijing', 11.7],
+    //             ['Guangzhou', 11.1],
+    //             ['Delhi', 11.1],
+    //             ['Shenzhen', 10.5],
+    //             ['Seoul', 10.4],
+    //             ['Jakarta', 10.0],
+    //             ['Kinshasa', 9.3],
+    //             ['Tianjin', 9.3],
+    //             ['Tokyo', 9.0],
+    //             ['Cairo', 8.9],
+    //             ['Dhaka', 8.9],
+    //             ['Mexico City', 8.9],
+    //             ['Lima', 8.9]
+    //         ],
+    //         dataLabels: {
+    //             enabled: true,
+    //             rotation: -90,
+    //             color: '#FFFFFF',
+    //             align: 'right',
+    //             format: '{point.y:.1f}', // one decimal
+    //             y: 10, // 10 pixels down from the top
+    //             style: {
+    //                 fontSize: '13px',
+    //                 fontFamily: 'Verdana, sans-serif'
+    //             }
+    //         }
+    //     }]
+    // });
 }

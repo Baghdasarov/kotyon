@@ -173,7 +173,7 @@ class ClickabilityWeek extends Command
                             $getEndResult[$groupKey][$count]['y'] = $getMyChanelRes[$groupKey][$nKey]['y'];
                             $getEndResult[$groupKey][$count]['bold'] = $getMyChanelRes[$groupKey][$nKey]['bold'];
                             $getEndResult[$groupKey][$count]['otherCount'] = '';
-                            $data_chart = $getMyChanelRes[$groupKey][$nKey]['y'];
+                            $data_chart[$groupKey] = $getMyChanelRes[$groupKey][$nKey]['y'];
                             $count++;
                         } else {
                             if ($nKey > 8) {
@@ -204,7 +204,7 @@ class ClickabilityWeek extends Command
                     $getEndResult[$groupKey][0] = $getEndResult[$groupKey][1];
                     unset($getEndResult[$groupKey][1]);
                 }
-                $insert=array('channel_id'=>$getChanel['channelid'],'user_id'=>$getUser['id'],'data'=>json_encode($getEndResult),'data_chart'=>$data_chart);
+                $insert=array('channel_id'=>$getChanel['channelid'],'user_id'=>$getUser['id'],'data'=>json_encode($getEndResult),'data_chart'=>json_encode($data_chart));
                 $this->info("creating:  ".$getChanel['channelname']." for ".$getUser['firstname']);
                 Clickability::insert($insert);
                 sleep(10);

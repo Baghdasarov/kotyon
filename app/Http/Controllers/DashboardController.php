@@ -504,16 +504,27 @@ class DashboardController extends Controller
             return redirect('login');
         }
     }
-    public function clickabilityJson(){
+    public function clickabilityJson(Request $request){
         $channel_session = session('default_channel');
         $getDataCharts= Clickability::
-        select('data_chart')
-            ->where('channel_id', $channel_session->channelid)
-            ->where('user_id',$channel_session->user_id)
-            ->get()->toArray();
+            select('data_chart')
+                ->where('channel_id', $channel_session->channelid)
+                ->where('user_id',$channel_session->user_id)
+                ->get()->toArray();
 
         foreach ($getDataCharts as $key=>$getDataChart){
-            $data['data'][$key] = floatval($getDataChart['data_chart']);
+            $ob = json_decode($getDataChart['data_chart']);
+            if(is_object($ob)) {
+                $arrayOb = get_object_vars($ob);
+                foreach ($arrayOb as $keyOb=>$arrayO){
+                    if($request->input('groupAll') == $keyOb){
+                        $data['data'][$key] = floatval($arrayO);
+                    }
+                }
+            }else{
+                $data['data'][$key] = floatval($getDataChart['data_chart']);
+
+            }
         }
         if(!isset($data['data'][1])){
             $data['data'][1] = $data['data'][0];
