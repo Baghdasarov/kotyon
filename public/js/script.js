@@ -666,7 +666,7 @@ $(document).ready(function(){
                         pie_chart("pie_chart_"+item,seriasPieChartData,item.replace('____'," "));
                     })
                 }else{
-                    $(".clickabilitiSimpleAlert").before("<div class='alert alert-info'><strong>Info!</strong> There is no data in you DB.</div>");
+                    $(".clickabilitiSimpleAlert").before("<div class='alert alert-info'><strong>Info!</strong> First update not performed yet. Please check again on Monday.</div>");
                     $(".loading").hide();
                 }
             }
