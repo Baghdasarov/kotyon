@@ -17,7 +17,7 @@ class CreateClickabilityTable extends Migration
             $table->string('channel_id');
             $table->integer('user_id');
             $table->longText('data');
-            $table->string('data_chart');
+            $table->longText('data_chart');
             $table->timestamp('created_at');
             $table->timestamp('updated_at');
         });
