@@ -1126,7 +1126,7 @@ class DashboardController extends Controller
             $channelid = $laravel_request->input('channelid');
             $channel_info = $this->getChannelInfo($channelid);
             if(!$channel_info) {
-                $laravel_request->session()->flash('error', "Error: This is not a valid channel ID. A channel ID looks something like this '$channelid'");
+                $laravel_request->session()->flash('error', "Error: This is not a valid channel ID. A channel ID looks something like this 'UCIiXRFHI3aItnDaOI29Jodg'");
                 return redirect()->back();
             }
             $channelname = (isset($channel_info->brandingSettings->channel->title))?$channel_info->brandingSettings->channel->title:'no title';
