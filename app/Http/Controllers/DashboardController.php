@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Goutte\Client;
 use App\User;
 use App\Search as Search;
+use League\Flysystem\Exception;
 
 class DashboardController extends Controller
 {
@@ -764,7 +765,7 @@ class DashboardController extends Controller
         ];
         $params = http_build_query($params);
         $data = file_get_contents($root.$params);
-
+        if(empty(\GuzzleHttp\json_decode($data)->items)) return false;
         return \GuzzleHttp\json_decode($data)->items[0];
     }
 
@@ -782,18 +783,31 @@ class DashboardController extends Controller
     }
 
     function requestAPI($url){
+        try {
+            $ch = curl_init();
+            if (FALSE === $ch)
+                throw new Exception('failed to initialize');
 
-        $ch = curl_init();
-        curl_setopt_array(
-            $ch, array(
-            CURLOPT_URL => $url,
-            CURLOPT_RETURNTRANSFER => true,
-            //todo remove
+            curl_setopt_array(
+                $ch, array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT => 0,
+                //todo remove
 //            CURLOPT_SSL_VERIFYHOST=> 0,
 //            CURLOPT_SSL_VERIFYPEER=> 0,
-        ));
-        $resp = curl_exec($ch);
-        curl_close($ch);
+            ));
+            $resp = curl_exec($ch);
+
+            if (FALSE === $resp)
+                throw new Exception(curl_error($ch), curl_errno($ch));
+            curl_close($ch);
+        } catch(Exception $e) {
+            trigger_error(sprintf(
+                'Curl failed with error #%d: %s',
+                $e->getCode(), $e->getMessage()),
+                E_USER_ERROR);
+        }
         return $resp;
     }
 
@@ -1020,18 +1034,28 @@ class DashboardController extends Controller
                 'group' => $group,
                 'country' => $country,
             ];
-            if(count($items)>100){
-                $laravel_request->session()->flash('error','You can add only 100 keywords at a time');
+            if(count($items)>500){
+                $laravel_request->session()->flash('error','You can add only 500 keywords at a time');
                 return redirect('rankings');
             }
+
             ini_set("max_execution_time","0");
+            set_time_limit(0);
             Keywords::insert($keywords_insert);
-            $insert_array = $this->getInsertArray($items,$options);
-            if($insert_array != false){
-                Search::insert($insert_array);
-            }
-            else {
-                $laravel_request->session()->flash('error', 'Something went wrong');
+
+
+            $stepCount = count($keywords_insert)/100;
+            $start = 0;
+
+            for($i=0;$i<$stepCount;$i++){
+                $insert_array = $this->getInsertArray(array_slice($items,$start,100),$options);
+                if($insert_array != false){
+                    Search::insert($insert_array);
+                }
+                else {
+                    $laravel_request->session()->flash('error', 'Something went wrong');
+                }
+                $start += 100;
             }
         }
         return redirect('rankings');
@@ -1101,7 +1125,11 @@ class DashboardController extends Controller
         if($laravel_request->input('channelid')){
             $channelid = $laravel_request->input('channelid');
             $channel_info = $this->getChannelInfo($channelid);
-            $channelname = $channel_info->brandingSettings->channel->title;
+            if(!$channel_info) {
+                $laravel_request->session()->flash('error', "Error: This is not a valid channel ID. A channel ID looks something like this '$channelid'");
+                return redirect()->back();
+            }
+            $channelname = (isset($channel_info->brandingSettings->channel->title))?$channel_info->brandingSettings->channel->title:'no title';
             $channel_data = array(
                 'channelname' =>  $channelname,
                 'channelid' => $channelid,
@@ -1130,18 +1158,23 @@ class DashboardController extends Controller
         $user_id = $laravel_request->session()->get('user_id');
         if($laravel_request->input('channel_id')){
             $channel_id = $laravel_request->input('channel_id');
+            $chanelLongId = $laravel_request->session()->get('default_channel')->channelid;
+
             $res = DB::table('channels')->where('id', $channel_id)->delete();
             if($res){
-                $channels = DB::table('channels')->where('user_id','=', $user_id)->get();
-                session(['channels' => $channels]);
-                $random_channel = DB::table('channels')->where('user_id', $user_id)->first();                
-                if($random_channel != null){
-                    session(['default_channel' => $random_channel]);
-                }                 
-                else{
-                    $laravel_request->session()->forget('default_channel');
-                }                
-                echo 'done';
+                $remKeys = DB::table('keywords')->where('channel_id', $chanelLongId)->where('user_id', $user_id)->delete();
+                if($remKeys){
+                    $channels = DB::table('channels')->where('user_id','=', $user_id)->get();
+                    session(['channels' => $channels]);
+                    $random_channel = DB::table('channels')->where('user_id', $user_id)->first();
+                    if($random_channel != null){
+                        session(['default_channel' => $random_channel]);
+                    }
+                    else{
+                        $laravel_request->session()->forget('default_channel');
+                    }
+                    echo 'done';
+                }
             }
 
         }

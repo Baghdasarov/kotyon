@@ -222,7 +222,12 @@ $(document).ready(function(){
     // $(".rankSort").click();
 
     $('#select_country').on('change',(function () {
-        table.column(7).search(this.value).draw();
+        if(this.value == 0){
+            table.column(7).search('').draw()
+        }else{
+            table.column(7).search(this.value).draw();
+        }
+
     })
     );
 

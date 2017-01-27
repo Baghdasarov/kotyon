@@ -295,6 +295,10 @@ table.dataTable thead th:first-child {
 .groupnameClickability{
     cursor: pointer;
 }
+
+.flash-message p{
+    margin: 0;
+}
 @-moz-keyframes spinPulse {
     0% {
         -moz-transform: rotate(160deg);
