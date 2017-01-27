@@ -1,0 +1,150 @@
+input[type=text], textarea {
+  -webkit-transition: all 0.30s ease-in-out;
+  -moz-transition: all 0.30s ease-in-out;
+  -ms-transition: all 0.30s ease-in-out;
+  -o-transition: all 0.30s ease-in-out;
+  outline: none;
+}
+ 
+input[type=text]:focus, textarea:focus {
+  box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+}
+
+.wrapper {
+	width: 800px;
+	height: 100%;
+	position: relative;
+	display: block;
+	margin: 0 auto;
+}
+
+.bar-wrapper {
+    width: 600px;
+    position: relative;
+    margin: 15px auto;
+    padding: 5px;
+    background-color: #C9C9C9;
+    border-radius: 100px;
+    border: solid 3px grey;
+}
+
+.bar {
+    width: 500px;
+    height: 25px;
+    background-color: grey;
+    border-radius: 100px;
+    overflow: hidden;
+    border: solid 2px grey;
+}
+
+.progress {
+    width: 0;
+    height: 100%;
+    background-color: #C7C700;
+    transition: 1s;
+    box-shadow: 0 2px 1px black;
+    background: linear-gradient(to bottom, #f7e971 0%,#eded55 49%,#dce000 57%,#b5b72a 100%);
+}
+
+.pg-text {
+    position: relative;
+    right: 20px;
+    top: -27px;
+    float: right;
+    font-size: 1.4em;
+    height: 5px;
+    font-weight: bold;
+    color: #00C200;
+    font-family: Helvetica;
+    text-shadow: 0px 0px 2px black;
+}
+
+.form {
+    position: relative;
+    width: 600px;
+    margin: 15px auto;
+}
+
+.input-line {
+    margin-bottom: 50px;
+    position: relative;
+    height: 10px;
+}
+
+.input-wrapper {
+    display: inline-block;
+    float: left;
+    width: 260px;
+}
+
+.second {
+    margin-left: 30px;
+}
+
+.border {
+	display:block;
+	position: relative;
+	margin: 0 auto;
+}
+
+.si-wrapper {
+    /*margin-left: 40px;*/
+}
+
+.input-title {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 1.1em;
+    font-family: Helvetica;
+    font-weight: bold;
+}
+
+input[type=text] {
+    border-radius: 50px;
+    padding: 2px 10px;
+    border: solid 2px grey;
+    width: 250px;
+}
+
+.contorls {
+    width: 525px;
+    position: relative;
+    margin: 0 auto;
+}
+
+.start {
+    background-image: url(../img/start.png);
+    background-size: 100%;
+    height: 100px;
+    width: 100px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.download {
+    background-image: url(../img/download.jpg);
+    background-size: 100%;
+    background-repeat: no-repeat;
+    height: 80px;
+    width: 300px;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    top: -10px;
+    opacity: 0.7;
+    cursor: default;
+    margin-left: 100px;
+}
+
+.error-msg {
+    position: absolute;
+    width: 200px;
+    margin-left: 70px;
+    color: red;
+}
+
+.options {
+    position: relative;
+    width: 600px;
+    margin: 15px auto;
+}
