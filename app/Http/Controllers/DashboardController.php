@@ -1129,6 +1129,10 @@ class DashboardController extends Controller
                 $laravel_request->session()->flash('error', "Error: This is not a valid channel ID. A channel ID looks something like this 'UCIiXRFHI3aItnDaOI29Jodg'");
                 return redirect()->back();
             }
+            if(!empty(Channels::where('channelid',$channelid)->where('user_id',$laravel_request->session()->get('user_id'))->get()->first())){
+                $laravel_request->session()->flash('error', "Channel id '".$channelid."' already exists");
+                return redirect()->back();
+            }
             $channelname = (isset($channel_info->brandingSettings->channel->title))?$channel_info->brandingSettings->channel->title:'no title';
             $channel_data = array(
                 'channelname' =>  $channelname,
