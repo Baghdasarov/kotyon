@@ -1186,7 +1186,7 @@ class DashboardController extends Controller
             $channel_id = $laravel_request->input('channel_id');
             $chanelLongId = $laravel_request->session()->get('default_channel')->channelid;
 
-            $res = DB::table('channels')->where('id', $channel_id)->delete();
+            $res = DB::table('channels')->where('id', $channel_id)->where('user_id', $user_id)->delete();
             if($res){
                 $remKeys = DB::table('keywords')->where('channel_id', $chanelLongId)->where('user_id', $user_id);
                 if(!empty($remKeys->get())){
