@@ -39,7 +39,7 @@ if (!$loggenIn) {
 
 //session_start();
 //print_r($_SESSION);
-$domain = "novelconcept.org";
+$domain = "http://104.199.73.209/rankifyindustry/youtube.php";
 $dir = "/ytb/";
 $api_key = "AIzaSyB0aC7v_GYru8bY0_N4ARHi_sKmA_4ZAU8";
 $client_id = "116557245044-p6084545s459inpuuvk6nkgfun06lhff.apps.googleusercontent.com";

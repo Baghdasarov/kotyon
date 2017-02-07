@@ -1034,29 +1034,51 @@ class DashboardController extends Controller
                 'group' => $group,
                 'country' => $country,
             ];
-            if(count($items)>500){
-                $laravel_request->session()->flash('error','You can add only 500 keywords at a time');
+            if(count($items)>100){
+                $laravel_request->session()->flash('error','You can add only 100 keywords at a time');
                 return redirect('rankings');
             }
 
             ini_set("max_execution_time","0");
-            set_time_limit(0);
+            /*set limit 500 */
+//            set_time_limit(0);
+            /*end*/
+
+            $user_id = $laravel_request->session()->get('user_id');
+            $chanelLongId = $laravel_request->session()->get('default_channel')->channelid;
+
+            $countKeywordForUser = Keywords::where('channel_id',$chanelLongId)->where('user_id', $user_id)->get()->count();
+            if($countKeywordForUser > 1000){
+                $laravel_request->session()->flash('error','You already have 1000 keyword, max size keyword for you 1000');
+                return redirect('rankings');
+            }
+
             Keywords::insert($keywords_insert);
 
-
-            $stepCount = count($keywords_insert)/100;
-            $start = 0;
-
-            for($i=0;$i<$stepCount;$i++){
-                $insert_array = $this->getInsertArray(array_slice($items,$start,100),$options);
-                if($insert_array != false){
-                    Search::insert($insert_array);
-                }
-                else {
-                    $laravel_request->session()->flash('error', 'Something went wrong');
-                }
-                $start += 100;
+            $insert_array = $this->getInsertArray($items,$options);
+            if($insert_array != false){
+                Search::insert($insert_array);
             }
+            else {
+               $laravel_request->session()->flash('error', 'Something went wrong');
+            }
+
+            /*set limit 500 */
+//            $stepCount = count($keywords_insert)/100;
+//            $start = 0;
+//
+//            for($i=0;$i<$stepCount;$i++){
+//                $insert_array = $this->getInsertArray(array_slice($items,$start,100),$options);
+//                if($insert_array != false){
+//                    Search::insert($insert_array);
+//                }
+//                else {
+//                    $laravel_request->session()->flash('error', 'Something went wrong');
+//                }
+//                $start += 100;
+//            }
+            /*end*/
+
         }
         return redirect('rankings');
     }
@@ -1166,21 +1188,25 @@ class DashboardController extends Controller
 
             $res = DB::table('channels')->where('id', $channel_id)->delete();
             if($res){
-                $remKeys = DB::table('keywords')->where('channel_id', $chanelLongId)->where('user_id', $user_id)->delete();
-                if($remKeys){
-                    $channels = DB::table('channels')->where('user_id','=', $user_id)->get();
-                    session(['channels' => $channels]);
-                    $random_channel = DB::table('channels')->where('user_id', $user_id)->first();
-                    if($random_channel != null){
-                        session(['default_channel' => $random_channel]);
+                $remKeys = DB::table('keywords')->where('channel_id', $chanelLongId)->where('user_id', $user_id);
+                if(!empty($remKeys->get())){
+                    foreach ($remKeys->get() as $remKey){
+                        DB::table('search')->where('keyword', $remKey->id)->delete();
                     }
-                    else{
-                        $laravel_request->session()->forget('default_channel');
-                    }
-                    echo 'done';
+                    $remKeys->delete();
                 }
             }
 
+            $channels = DB::table('channels')->where('user_id','=', $user_id)->get();
+            session(['channels' => $channels]);
+            $random_channel = DB::table('channels')->where('user_id', $user_id)->first();
+            if($random_channel != null){
+                session(['default_channel' => $random_channel]);
+            }
+            else{
+                $laravel_request->session()->forget('default_channel');
+            }
+            echo 'done';
         }
     }
 

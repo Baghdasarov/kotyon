@@ -90,16 +90,25 @@ function startSearch(){
   download.style.cursor = "default";
   download.style.opacity = 0.7;
   document.getElementById("link").href = "";
-  $.ajax({
-    method: "POST",
-    url: "youtube.php",
-    data: data,
-    success: function(msg){
-      console.log(msg);
-      workData = JSON.parse(msg);
-      beginUpdating();
-    }
+  accessForAjax = false;
+  $(".term1").each(function (index,value) {
+      if(value.value.length>0) accessForAjax = true;
   });
+  if(accessForAjax){
+    $.ajax({
+      method: "POST",
+      url: "youtube.php",
+      data: data,
+      success: function(msg){
+        console.log(msg);
+        workData = JSON.parse(msg);
+        beginUpdating();
+      }
+    });
+  }else{
+    location.reload();
+    alert("fill at least one field");
+  }
 }
 
 function beginUpdating(){
