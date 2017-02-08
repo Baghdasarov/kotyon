@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Cookie;
 use DB;
 use Carbon;
@@ -32,8 +33,9 @@ class LoginController extends Controller
         if($request->input('submit')){
             $email = $request->input('email');
             $password = $request->input('password');
-            $result = DB::table('users')->where('email',$email)->where('password', $password)->first();
-            if(!empty($result)){
+            $result = DB::table('users')->where('email',$email)->first();
+            $checkVerify = Hash::check($password, $result->password);
+            if($checkVerify){
                 session(['user_id' =>$result->id]);
                 $channels = DB::table('channels')->where('user_id', $result->id)->get();
                 session(['channels' => $channels]);
@@ -105,7 +107,7 @@ class LoginController extends Controller
                 'firstname' => $firstname,
                 'lastname' => $lastname,
                 'email' => $email,
-                'password' => $password,
+                'password' =>  Hash::make($password),
                 'created_at' => Carbon\Carbon::now(),
                 'updated_at' => Carbon\Carbon::now(),
             );
