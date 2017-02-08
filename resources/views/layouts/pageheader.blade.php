@@ -47,7 +47,7 @@
                                         @if(Session::has('default_channel'))
                                             {{Session::get('default_channel')->channelname}}
                                             @if(isset($countKeyword))
-                                                {{ $countKeyword }}/200
+                                                {{ $countKeyword }}/1000
                                             @endif
                                         @else
                                             Add a channel
