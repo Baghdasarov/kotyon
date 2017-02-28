@@ -14,13 +14,17 @@
 Route::get('/', 'DashboardController@index');
 Route::get('dashboard', 'DashboardController@index');
 Route::get('rankings/{csv?}', 'DashboardController@rankings');
+Route::get('analysis/csv', 'AnalysisController@csvDownload');
 Route::get('rankingsJson', 'DashboardController@rankingsJson');
 Route::get('clickabilityJson', 'DashboardController@clickabilityJson');
+Route::get('analysisJson', 'AnalysisController@analysisJson');
 Route::get('rankingsJsonOption', 'DashboardController@rankingsJsonOption');
 Route::post('startSearch', 'DashboardController@startSearch');
 Route::get('startSearch', 'DashboardController@startSearch');
+Route::post('getVideos', 'AnalysisController@getVideos');
 Route::post('changeKeywordGroup', 'DashboardController@changeKeywordGroup');
 Route::get('clickability', 'DashboardController@clickability');
+Route::get('analysis', 'AnalysisController@index');
 
 Route::post('login', 'LoginController@login');
 Route::get('login', 'LoginController@index');

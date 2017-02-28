@@ -19,6 +19,15 @@ $(document).ready(function(){
         $('#addKeyword').css('display', 'none');
     });
 
+    $('#analysis_search').click(function(){
+        if($('#keywords').val() == 'none'){
+            alert('enter keywords');
+            return false;
+        }
+        $('.loading').modal('show');
+        $('.modal-dialog').css('display', 'none');
+    });
+
     $("form #submit").click(function (e) {
         if($('#channelid').val() == ''){
             e.preventDefault();
@@ -230,6 +239,11 @@ $(document).ready(function(){
 
     })
     );
+
+    $(".analysisAlertClose").click(function () {
+        $(".analysisSimpleAlert").hide();
+    });
+
 
     var keywords = [];
     var keywordsId = [];
@@ -642,6 +656,7 @@ $(document).ready(function(){
     $(".loading").hide();
     if($('div').hasClass("for_ajax_load")){
         $(".clickabilitiSimpleAlert").show();
+        $(".analysisSimpleAlert").show();
         $(".clickabilityAlertClose").click(function () {
             $(".clickabilitiSimpleAlert").hide();
         });

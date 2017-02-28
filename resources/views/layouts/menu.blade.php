@@ -23,6 +23,13 @@
                     <span class="arrow"></span>
                 </a>
             </li>
+            <li class="nav-item  ">
+                <a href="analysis" class="nav-link nav-toggle">
+                    <i class="icon-pie-chart"></i>
+                    <span class="title">Industry Analysis</span>
+                    <span class="arrow"></span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

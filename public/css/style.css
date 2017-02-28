@@ -1,7 +1,6 @@
 .page_header{
     font-size: 35px;
     font-weight: 800;
-    
 }
 .login{
     width: 40%;
@@ -13,7 +12,6 @@
     font-weight: 600;
 }
 .stats_square{
-    
     width: 115px;
     height: 115px;
     float:left;
@@ -234,57 +232,103 @@ table.dataTable thead th:first-child {
     top: 0;
     height: 100%;
     width: 100%;
-    padding: 300px;
     left: 0;
     background: rgba(38,52,75,0.8);
 }
 /*loading*/
-.circle2 {
-    background-color: rgba(0,0,0,0);
-    border: 5px solid rgb(23, 196, 187);
-    opacity: .9;
-    border-right: 5px solid rgba(0,0,0,0);
-    border-left: 5px solid rgba(0,0,0,0);
-    border-radius: 50px;
-    box-shadow: 0 0 35px #26334b;
-    width: 80px;
-    height: 80px;
-    border-radius: 50% !important;
-    /* padding: 20px; */
-    margin: 0 auto;
-    -moz-animation: spinPulse 1s infinite ease-in-out;
-    -webkit-animation: spinPulse 1s infinite linear;
+
+div.spinner {
+    position: relative;
+    top: 20%;
+    padding: 130px;
+    left: 20%;
+    width: 5%;
+    height: 30%;
+    display: inline-block;
+    margin-left: 25%;
+    margin-right: 50%;
 }
 
-.circle1 {
-    background-color: rgba(0,0,0,0);
-    border: 5px solid rgb(23, 196, 187);
-    opacity: .9;
-    border-left: 5px solid rgba(0,0,0,0);
-    border-right: 5px solid rgba(0,0,0,0);
-    border-radius: 50px;
-    box-shadow: 0 0 15px #26334b;
-    width: 50px;
-    height: 0;
-    margin: 0 auto;
-    position: relative;
-    top: -40px;
-    -moz-animation: spinoffPulse 1s infinite linear;
-    -webkit-animation: spinoffPulse 1s infinite linear;
+div.spinner div {
+    width: 6%;
+    height: 16%;
+    background: black;
+    position: absolute;
+    opacity: 0;
+    -webkit-border-radius: 50px;
+    -webkit-box-shadow: 0 0 3px rgba(0,0,0,0.2);
+    -webkit-animation: fade 1s linear infinite;
 }
-.clickabilitiSimpleAlert{
+
+@-webkit-keyframes fade {
+    from {opacity: 1;}
+    to {opacity: 0.25;}
+}
+
+div.spinner div.bar1 {
+    -webkit-transform:rotate(0deg) translate(0, -130%);
+    -webkit-animation-delay: 0s;
+}
+
+div.spinner div.bar2 {
+    -webkit-transform:rotate(30deg) translate(0, -130%);
+    -webkit-animation-delay: -0.9167s;
+}
+
+div.spinner div.bar3 {
+    -webkit-transform:rotate(60deg) translate(0, -130%);
+    -webkit-animation-delay: -0.833s;
+}
+div.spinner div.bar4 {
+    -webkit-transform:rotate(90deg) translate(0, -130%);
+    -webkit-animation-delay: -0.7497s;
+}
+div.spinner div.bar5 {
+    -webkit-transform:rotate(120deg) translate(0, -130%);
+    -webkit-animation-delay: -0.667s;
+}
+div.spinner div.bar6 {
+    -webkit-transform:rotate(150deg) translate(0, -130%);
+    -webkit-animation-delay: -0.5837s;
+}
+div.spinner div.bar7 {
+    -webkit-transform:rotate(180deg) translate(0, -130%);
+    -webkit-animation-delay: -0.5s;
+}
+div.spinner div.bar8 {
+    -webkit-transform:rotate(210deg) translate(0, -130%);
+    -webkit-animation-delay: -0.4167s;
+}
+div.spinner div.bar9 {
+    -webkit-transform:rotate(240deg) translate(0, -130%);
+    -webkit-animation-delay: -0.333s;
+}
+div.spinner div.bar10 {
+    -webkit-transform:rotate(270deg) translate(0, -130%);
+    -webkit-animation-delay: -0.2497s;
+}
+div.spinner div.bar11 {
+    -webkit-transform:rotate(300deg) translate(0, -130%);
+    -webkit-animation-delay: -0.167s;
+}
+div.spinner div.bar12 {
+    -webkit-transform:rotate(330deg) translate(0, -130%);
+    -webkit-animation-delay: -0.0833s;
+}
+
+.clickabilitiSimpleAlert, .analysisSimpleAlert{
     background: rgb(38, 52, 75);
     color: #fff;
     font-size: 11px;
     position: relative;
     text-align: center;
 }
-.clickabilitiSimpleAlert p{
+.clickabilitiSimpleAlert p, .analysisSimpleAlert p{
     width: 90%;
     margin: auto;
     padding: 15px 10px;
 }
-.clickabilitiSimpleAlert span{
+.clickabilitiSimpleAlert span, .analysisSimpleAlert span{
     position: absolute;
     top: 0px;
     right: 10px;
@@ -299,6 +343,28 @@ table.dataTable thead th:first-child {
 .flash-message p{
     margin: 0;
 }
+
+.averageStat{
+    background: #26344B;
+    border:10px solid white;
+    height: 150px;
+}
+.averageStat span{
+    margin:20px auto;
+    text-align: center;
+    display:block;
+}
+.averageStatTitle{
+    font-size: 16px;
+    font-weight: 600;
+    color:#17C4BB;
+}
+.averageStatResult{
+    font-size: 16px;
+    font-weight: 600;
+    color:#B71D2A
+}
+
 @-moz-keyframes spinPulse {
     0% {
         -moz-transform: rotate(160deg);
