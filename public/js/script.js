@@ -670,7 +670,8 @@ $(document).ready(function(){
             method: "get",
             url: "clickability",
             success: function(res){
-                if(res != 'empty'){
+                console.log(res);
+                if(res != 'empty' && typeof(res)=='object'){
                     $.each(res,function (item,value) {
                         var valRes = [];
                         valRes = res[item];
