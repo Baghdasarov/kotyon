@@ -258,7 +258,7 @@ class AnalysisController extends Controller
     public function csvDownload(Request $laravel_request){
         $fills = $laravel_request->session()->get('csv');
         header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename="rankings.csv";');
+        header('Content-Disposition: attachment; filename="IndustryAnalysis.csv";');
         $fp = fopen('php://output', 'w');
         fputcsv($fp, array('Views','Video Length','Video Age','Uploaded last 30 days','Likes','Dislikes','Comments','With Subtitles','Total Engagement','Total Engagement Per View','Channel Age','Channel Subscribers','Channel Videos'));
         fputcsv($fp, $fills);
